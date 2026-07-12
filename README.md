@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Persana
 
-## Getting Started
+SaaS com **site de marketing + app** na direção visual **"Editorial Noturno"**
+(Mercury × Stripe Press), **dark-first**. Dois mundos que nunca se misturam numa
+mesma superfície:
 
-First, run the development server:
+- **Tinta** — o produto logado (escuro, grafite neutro)
+- **Journal** — a comunicação editorial (grafite + acento de marca)
+
+## Stack
+
+- **Next.js 16** (App Router) + **React 19** + **TypeScript**
+- **Tailwind CSS v4** — tokens como CSS variables via `@theme`
+- Primitivos no padrão **shadcn/ui + Radix**, re-tokenizados (sem hex hardcoded)
+- **Spectral** (serifa) + **Manrope** (sans) — **self-hosted** via `next/font/local`
+  (arquivos `.woff2` do @fontsource em `public/fonts/`, zero dependência de CDN)
+- Gráficos em **SVG** declarativo
+
+## Rodar local
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Outros scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build    # build de produção
+npm start        # servir o build
+npm run lint     # eslint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura
 
-## Learn More
+```
+persana/
+├─ app/
+│  ├─ (marketing)/page.tsx     # home — mundo Journal (Nav, Hero, Journal)
+│  ├─ (app)/dashboard/page.tsx # app — mundo Tinta (StatTiles, gráfico, tabela)
+│  ├─ layout.tsx               # fontes + metadata
+│  ├─ globals.css              # design tokens (fonte de verdade das cores)
+│  ├─ fonts.ts                 # Spectral + Manrope self-hosted
+│  └─ icon.svg                 # favicon 'p.'
+├─ components/
+│  ├─ ui/            # primitivos: button, badge, card, input, table, stat-tile
+│  ├─ marketing/     # Nav, Hero, AppPreview, JournalSection, Logo
+│  └─ app/           # AppShell, RevenueCard, RevenueChart
+├─ lib/utils.ts      # cn() (clsx + tailwind-merge)
+├─ public/fonts/     # .woff2 (Spectral 400/500/600, Manrope 400/500/600/700)
+├─ design-reference/ # HTML dos protótipos — gabarito visual
+├─ CLAUDE.md         # regras de design do projeto
+└─ DEPLOY.md         # passo-a-passo de deploy na Vercel
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Design tokens (resumo)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Definidos em [`app/globals.css`](app/globals.css) e expostos como utilitários
+Tailwind pelo `@theme`. **Não hardcodar hex** — usar sempre `var(--token)` ou as
+utilities (`bg-bg-1`, `text-text-2`, `bg-brand-500`, `text-accent-300`…).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Grupo | Tokens |
+|---|---|
+| Superfícies (Tinta) | `--bg-0` #0C0C0D · `--bg-1` #141416 · `--bg-2` #1C1C1F · `--bg-3` #26262A |
+| Texto | `--text-1` #F4F4F5 · `--text-2` #A1A1AA · `--text-3` #71717A |
+| **Brand** (verde) | `--brand-500` **#1F9463** (+300/400/600) — só ação/foco/link, máx ~5% da tela |
+| **Accent** (azul) | `--accent-500` **#1C7ED6** (+300/400/600) — eyebrow, série 2, toques no app |
+| Journal | `--journal-bg` #17171A · `--journal-card` · `--journal-quote` |
+| Semânticas | `--success` · `--warning` · `--danger` (#E5605C) — sempre com ícone+rótulo |
 
-## Deploy on Vercel
+**Regras de cor:** superfícies em grafite neutro (sem roxo); vermelho **só** para
+`danger`; números de tabela/eixo em Manrope `tabular-nums`, números-herói em Spectral.
+Detalhes em [`CLAUDE.md`](CLAUDE.md).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tipografia
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Spectral** (serifa): títulos, números-herói (stat tiles), texto editorial.
+- **Manrope** (sans): toda a UI, rótulos, dados de tabela/eixo.
+- Sempre self-hosted — proibido `<link>` para Google Fonts.
+
+## Deploy
+
+Pronto para Vercel (sem variáveis de ambiente). Ver [`DEPLOY.md`](DEPLOY.md).
