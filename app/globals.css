@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   Persana — Editorial Noturno v2.0
+   Design tokens (PLANO §5): grafite neutro + --brand (Minas Pharma).
+   Fonte de verdade dos hex. Componentes NÃO hardcodam cor — usam var()
+   ou os utilitários Tailwind mapeados no @theme abaixo.
+   ===================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ===== Tinta — superfícies do produto (grafite neutro) ===== */
+  --bg-0: #0c0c0d; /* página (quase-preto aprovado) */
+  --bg-1: #141416; /* painel */
+  --bg-2: #1c1c1f; /* cartão */
+  --bg-3: #26262a; /* flutuante */
+
+  /* ===== Bordas ===== */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* ===== Texto (cinza neutro) ===== */
+  --text-1: #f4f4f5; /* primário */
+  --text-2: #a1a1aa; /* secundário */
+  --text-3: #71717a; /* mudo */
+
+  /* ===== Brand — verde (escolha do Leo: evitar o vermelho do logo) ===== */
+  --brand-300: #6fd1a6; /* claro — texto/acento em superfície escura */
+  --brand-400: #34b37e; /* journal accent */
+  --brand-500: #1f9463; /* accent primário — ações, links, foco */
+  --brand-600: #17784f; /* hover / pressed */
+  --brand-wash: rgba(31, 148, 99, 0.14);
+
+  /* ===== Accent secundário — azul (tons de azul, sem roxo/periwinkle) =====
+     Segundo acento: eyebrow, série 2 do gráfico, toques no app. */
+  --accent-300: #86c7f0;
+  --accent-400: #3d9be9;
+  --accent-500: #1c7ed6;
+  --accent-600: #1667b3;
+  --accent-wash: rgba(28, 126, 214, 0.14);
+
+  /* ===== Journal — superfícies editoriais (recolorido: grafite) ===== */
+  --journal-bg: #17171a;
+  --journal-card: #1e1e22;
+  --journal-quote: #101012;
+  --journal-accent: var(--brand-400);
+
+  /* ===== Semânticas (só estado, nunca série/decoração) ===== */
+  --success: #3dbd8a;
+  --warning: #e8a33d;
+  --danger: #e5605c;
+
+  /* ===== Data viz ===== */
+  --series-1: var(--brand-500); /* verde */
+  --series-2: var(--accent-500); /* azul (par verde+azul acessível) */
+  --series-3: #c98500;
+  /* aliases curtos usados pelo SVG do gráfico portado */
+  --s1: var(--series-1);
+  --s2: var(--series-2);
+  --s3: var(--series-3);
+
+  /* ===== Geometria ===== */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 10px 32px rgba(10, 10, 12, 0.5);
+}
+
+/* =====================================================================
+   Tailwind v4 @theme — expõe os tokens como utilitários.
+   `inline` faz o Tailwind emitir referências a var(--token), então
+   trocar o bloco --brand-* acima re-tinge todas as utilities de brand.
+   ===================================================================== */
+@theme inline {
+  /* superfícies */
+  --color-bg-0: var(--bg-0);
+  --color-bg-1: var(--bg-1);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+
+  /* bordas */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  /* texto */
+  --color-text-1: var(--text-1);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+
+  /* brand */
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-wash: var(--brand-wash);
+
+  /* accent (azul) */
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-wash: var(--accent-wash);
+
+  /* journal */
+  --color-journal-bg: var(--journal-bg);
+  --color-journal-card: var(--journal-card);
+  --color-journal-quote: var(--journal-quote);
+  --color-journal-accent: var(--journal-accent);
+
+  /* semânticas */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  /* séries */
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+
+  /* tipografia — next/font provê --font-spectral / --font-manrope */
+  --font-serif: var(--font-spectral), Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+
+  /* raios */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  /* sombras (--shadow-1/2) ficam só no :root; use var(--shadow-N) ou
+     shadow-[var(--shadow-N)] — evita auto-referência no @theme. */
+}
+
+/* ===== Base ===== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--text-1);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* números de tabela/eixo em Manrope tabular; números-herói em Spectral */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* foco visível consistente — sempre na cor da brand */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  background: var(--brand-wash);
+  color: var(--text-1);
+}

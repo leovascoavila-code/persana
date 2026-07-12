@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Persana — Guia de Identidade Visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    /* Superfícies (dark-first) */
+    --bg-0:#09090B;
+    --bg-1:#101014;
+    --bg-2:#16161C;
+    --bg-3:#1D1D25;
+    /* Bordas */
+    --border:rgba(255,255,255,.08);
+    --border-strong:rgba(255,255,255,.14);
+    /* Texto */
+    --text-1:#EEEEF2;
+    --text-2:#9B9BA7;
+    --text-3:#62626E;
+    /* Accent — Iris */
+    --accent-300:#AEB4FA;
+    --accent-400:#8D95F8;
+    --accent-500:#6674F0;
+    --accent-600:#4F5AE0;
+    --accent-700:#3E47BE;
+    --accent-glow:rgba(102,116,240,.16);
+    /* Semânticas */
+    --success:#34C98A;
+    --warning:#E8A33D;
+    --danger:#E5605C;
+    /* Data viz (validadas p/ superfície escura) */
+    --series-1:#6674F0;
+    --series-2:#1FA478;
+    --series-3:#C98500;
+    /* Geometria */
+    --r-sm:6px; --r-md:10px; --r-lg:16px;
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 8px 24px rgba(0,0,0,.45);
+    --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg-0);color:var(--text-1);
+    font-family:var(--font);font-size:15px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent-glow);color:var(--accent-300)}
+
+  /* ============ LAYOUT ============ */
+  .wrap{max-width:1060px;margin:0 auto;padding:0 32px}
+  section{padding:88px 0;border-top:1px solid var(--border)}
+  section:first-of-type{border-top:none}
+  .kicker{
+    font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-400);margin-bottom:14px;
+  }
+  h2{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
+  .lead{color:var(--text-2);max-width:640px;margin-bottom:44px;font-size:16px}
+  h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin:40px 0 16px}
+  h3:first-of-type{margin-top:0}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:860px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{
+    background:var(--bg-1);border:1px solid var(--border);
+    border-radius:var(--r-lg);padding:24px;
+  }
+  .note{color:var(--text-3);font-size:13px;margin-top:12px}
+  code,.mono{font-family:'SF Mono',ui-monospace,'Cascadia Code',Consolas,monospace;font-size:12.5px}
+  code{background:var(--bg-2);border:1px solid var(--border);border-radius:5px;padding:2px 7px;color:var(--accent-300)}
+
+  /* ============ HERO ============ */
+  .hero{padding:120px 0 96px;text-align:left;position:relative;overflow:hidden}
+  .hero-glow{
+    position:absolute;top:-220px;left:50%;transform:translateX(-50%);
+    width:820px;height:440px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(102,116,240,.14),transparent 70%);
+    pointer-events:none;
+  }
+  .wordmark{
+    font-size:64px;font-weight:600;letter-spacing:-.045em;line-height:1.05;
+    background:linear-gradient(135deg,#FFFFFF 30%,#AEB4FA 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero p.tag{font-size:19px;color:var(--text-2);margin:20px 0 0;max-width:560px}
+  .hero .meta{margin-top:44px;display:flex;gap:28px;flex-wrap:wrap;font-size:13px;color:var(--text-3)}
+  .hero .meta b{color:var(--text-2);font-weight:500}
+
+  /* ============ PRINCÍPIOS ============ */
+  .principle .num{
+    font-size:12px;font-weight:600;color:var(--accent-400);letter-spacing:.1em;margin-bottom:10px;display:block;
+  }
+  .principle h4{font-size:15px;font-weight:600;margin-bottom:6px;letter-spacing:-.01em}
+  .principle p{font-size:13.5px;color:var(--text-2)}
+
+  /* ============ LOGO ============ */
+  .logo-stage{
+    display:flex;align-items:center;justify-content:center;
+    min-height:220px;background:var(--bg-1);
+    border:1px solid var(--border);border-radius:var(--r-lg);
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:22px 22px;
+  }
+  .logo-mark{font-size:40px;font-weight:600;letter-spacing:-.04em;color:var(--text-1)}
+  .logo-mark .dot{color:var(--accent-500)}
+  .logo-stage.on-light{background-color:#FAFAFB;background-image:radial-gradient(rgba(0,0,0,.06) 1px,transparent 1px)}
+  .logo-stage.on-light .logo-mark{color:#17171C}
+  .dont{border-color:rgba(229,96,92,.35)}
+  .dont .label-dont{font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--danger);text-transform:uppercase;margin-bottom:10px}
+  .ok .label-ok{font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--success);text-transform:uppercase;margin-bottom:10px}
+
+  /* ============ CORES ============ */
+  .swatch{
+    border-radius:var(--r-md);border:1px solid var(--border);overflow:hidden;
+    cursor:pointer;transition:transform .15s ease;
+  }
+  .swatch:hover{transform:translateY(-2px)}
+  .swatch .chip{height:72px}
+  .swatch .info{padding:10px 12px;background:var(--bg-1)}
+  .swatch .info b{display:block;font-size:12.5px;font-weight:500}
+  .swatch .info span{font-size:11.5px;color:var(--text-3);font-family:ui-monospace,monospace}
+  .copied-toast{
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--bg-3);border:1px solid var(--border-strong);color:var(--text-1);
+    padding:9px 18px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;
+    transition:all .25s ease;box-shadow:var(--shadow-2);z-index:99;
+  }
+  .copied-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ============ TIPOGRAFIA ============ */
+  .type-row{
+    display:grid;grid-template-columns:150px 1fr;gap:24px;align-items:baseline;
+    padding:20px 0;border-bottom:1px solid var(--border);
+  }
+  .type-row:last-child{border-bottom:none}
+  .type-meta{font-size:12px;color:var(--text-3);font-family:ui-monospace,monospace;line-height:1.8}
+  .t-display{font-size:56px;font-weight:600;letter-spacing:-.04em;line-height:1.05}
+  .t-h1{font-size:40px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
+  .t-h2{font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+  .t-h3{font-size:20px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+  .t-body{font-size:15px;font-weight:400;color:var(--text-2)}
+  .t-small{font-size:13px;font-weight:400;color:var(--text-2)}
+  .t-caption{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+
+  /* ============ ESPAÇAMENTO ============ */
+  .space-demo{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+  .space-demo .s{background:var(--accent-glow);border:1px solid var(--accent-700);border-radius:4px}
+  .space-demo .lbl{font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-family:ui-monospace,monospace}
+  .radius-demo{display:flex;gap:18px;flex-wrap:wrap}
+  .radius-demo .r{width:96px;height:96px;background:var(--bg-2);border:1px solid var(--border-strong)}
+
+  /* ============ COMPONENTES ============ */
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--font);font-size:13.5px;font-weight:500;
+    padding:9px 18px;border-radius:var(--r-sm);border:1px solid transparent;
+    cursor:pointer;transition:all .15s ease;letter-spacing:-.005em;
+  }
+  .btn-primary{background:var(--accent-500);color:#fff}
+  .btn-primary:hover{background:var(--accent-400)}
+  .btn-secondary{background:var(--bg-2);color:var(--text-1);border-color:var(--border-strong)}
+  .btn-secondary:hover{background:var(--bg-3)}
+  .btn-ghost{background:transparent;color:var(--text-2)}
+  .btn-ghost:hover{color:var(--text-1);background:var(--bg-2)}
+  .btn-danger{background:transparent;color:var(--danger);border-color:rgba(229,96,92,.35)}
+  .btn-danger:hover{background:rgba(229,96,92,.1)}
+  .input{
+    width:100%;background:var(--bg-2);border:1px solid var(--border-strong);
+    border-radius:var(--r-sm);padding:9px 13px;color:var(--text-1);
+    font-family:var(--font);font-size:13.5px;outline:none;transition:all .15s ease;
+  }
+  .input::placeholder{color:var(--text-3)}
+  .input:focus{border-color:var(--accent-500);box-shadow:0 0 0 3px var(--accent-glow)}
+  .field label{display:block;font-size:12.5px;font-weight:500;color:var(--text-2);margin-bottom:7px}
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;
+    padding:3px 10px;border-radius:99px;border:1px solid;
+  }
+  .badge .dot-i{width:6px;height:6px;border-radius:50%}
+  .badge-ok{color:var(--success);border-color:rgba(52,201,138,.3);background:rgba(52,201,138,.08)}
+  .badge-ok .dot-i{background:var(--success)}
+  .badge-warn{color:var(--warning);border-color:rgba(232,163,61,.3);background:rgba(232,163,61,.08)}
+  .badge-warn .dot-i{background:var(--warning)}
+  .badge-neutral{color:var(--text-2);border-color:var(--border-strong);background:var(--bg-2)}
+  .badge-neutral .dot-i{background:var(--text-3)}
+  .badge-accent{color:var(--accent-300);border-color:rgba(102,116,240,.35);background:var(--accent-glow)}
+  .badge-accent .dot-i{background:var(--accent-400)}
+  table.ui{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.ui th{
+    text-align:left;font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--text-3);padding:10px 14px;border-bottom:1px solid var(--border);
+  }
+  table.ui td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--text-2)}
+  table.ui td:first-child{color:var(--text-1);font-weight:500}
+  table.ui tr:last-child td{border-bottom:none}
+  table.ui tr:hover td{background:rgba(255,255,255,.02)}
+  .num-cell{font-variant-numeric:tabular-nums}
+
+  /* ============ AMOSTRA DE PRODUTO ============ */
+  .app-frame{
+    background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-lg);
+    overflow:hidden;box-shadow:var(--shadow-2);
+  }
+  .app-top{
+    display:flex;align-items:center;gap:14px;padding:13px 20px;
+    border-bottom:1px solid var(--border);background:var(--bg-1);
+  }
+  .app-top .lm{font-size:15px;font-weight:600;letter-spacing:-.03em}
+  .app-top .lm .dot{color:var(--accent-500)}
+  .app-top nav{display:flex;gap:4px;margin-left:18px}
+  .app-top nav a{
+    font-size:12.5px;color:var(--text-3);text-decoration:none;
+    padding:5px 11px;border-radius:6px;
+  }
+  .app-top nav a.on{color:var(--text-1);background:var(--bg-2)}
+  .app-top nav a:hover{color:var(--text-1)}
+  .app-body{padding:24px 20px 20px}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+  @media(max-width:700px){.stat-row{grid-template-columns:1fr}}
+  .stat{
+    background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);
+    padding:16px 18px;
+  }
+  .stat .k{font-size:12px;color:var(--text-3);margin-bottom:6px}
+  .stat .v{font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+  .stat .d{font-size:12px;margin-top:6px}
+  .d-up{color:var(--success)}
+  .d-down{color:var(--danger)}
+  .chart-card{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:18px}
+  .chart-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:8px}
+  .chart-head h4{font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--text-2)}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  #chart-wrap{position:relative}
+  #tooltip{
+    position:absolute;pointer-events:none;opacity:0;transition:opacity .12s ease;
+    background:var(--bg-3);border:1px solid var(--border-strong);border-radius:8px;
+    padding:8px 12px;font-size:12px;box-shadow:var(--shadow-2);white-space:nowrap;z-index:5;
+  }
+  #tooltip b{display:block;font-size:11px;color:var(--text-3);font-weight:500;margin-bottom:3px}
+  #tooltip .row{display:flex;align-items:center;gap:7px;line-height:1.7}
+  #tooltip .row i{width:8px;height:8px;border-radius:2px;display:inline-block}
+  #tooltip .row .val{font-variant-numeric:tabular-nums;margin-left:auto;padding-left:14px;font-weight:600;color:var(--text-1)}
+
+  /* ============ DO / DON'T ============ */
+  .dd-list{list-style:none}
+  .dd-list li{
+    padding:11px 0 11px 30px;position:relative;color:var(--text-2);font-size:14px;
+    border-bottom:1px solid var(--border);
+  }
+  .dd-list li:last-child{border-bottom:none}
+  .dd-list li::before{position:absolute;left:0;font-weight:600}
+  .dd-list.yes li::before{content:"✓";color:var(--success)}
+  .dd-list.no li::before{content:"✕";color:var(--danger)}
+
+  footer{padding:56px 0;color:var(--text-3);font-size:12.5px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="wrap">
+    <div class="kicker">Guia de Identidade Visual · v1.0</div>
+    <div class="wordmark">persana<span style="-webkit-text-fill-color:var(--accent-500)">.</span></div>
+    <p class="tag">Um sistema visual minimalista premium — clareza absoluta, contenção deliberada e acabamento de precisão. Inspirado no padrão Linear / Vercel, construído para o Persana.</p>
+    <div class="meta">
+      <span><b>Estética</b> · Minimalista premium, dark-first</span>
+      <span><b>Tipografia</b> · Inter</span>
+      <span><b>Accent</b> · Iris #6674F0</span>
+    </div>
+  </div>
+</div>
+
+<section id="principios">
+  <div class="wrap">
+    <div class="kicker">01 — Fundamentos</div>
+    <h2>Princípios de design</h2>
+    <p class="lead">Quatro princípios governam toda decisão visual. Quando houver dúvida entre duas opções, vence a que melhor atende a estes critérios, nesta ordem.</p>
+    <div class="grid g4">
+      <div class="card principle">
+        <span class="num">P·01</span>
+        <h4>Clareza primeiro</h4>
+        <p>A interface existe para o conteúdo, não o contrário. Hierarquia tipográfica resolve antes de cor, cor resolve antes de ornamento.</p>
+      </div>
+      <div class="card principle">
+        <span class="num">P·02</span>
+        <h4>Contenção</h4>
+        <p>Uma cor de marca, usada com parcimônia. Se tudo destaca, nada destaca. O accent aparece apenas em ações primárias e estados ativos.</p>
+      </div>
+      <div class="card principle">
+        <span class="num">P·03</span>
+        <h4>Precisão</h4>
+        <p>Grade de 4px, escala tipográfica fixa, raios e sombras tokenizados. Nenhum valor mágico: todo pixel tem origem em um token.</p>
+      </div>
+      <div class="card principle">
+        <span class="num">P·04</span>
+        <h4>Profundidade sutil</h4>
+        <p>Elevação por camadas de superfície e hairlines translúcidas — nunca por sombras pesadas. O dark mode é o modo nativo, não uma inversão.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="logo">
+  <div class="wrap">
+    <div class="kicker">02 — Marca</div>
+    <h2>Logotipo</h2>
+    <p class="lead">Wordmark tipográfico: Inter Semibold, caixa baixa, tracking -4%, com ponto final no accent Iris — o gesto mínimo que assina a marca. Área de proteção equivalente à altura da letra "p" em todos os lados.</p>
+    <div class="grid g2">
+      <div>
+        <div class="logo-stage"><div class="logo-mark">persana<span class="dot">.</span></div></div>
+        <p class="note">Versão principal — sobre superfícies escuras.</p>
+      </div>
+      <div>
+        <div class="logo-stage on-light"><div class="logo-mark">persana<span class="dot">.</span></div></div>
+        <p class="note">Versão para superfícies claras — mesmo desenho, ink #17171C.</p>
+      </div>
+    </div>
+    <h3>Uso incorreto</h3>
+    <div class="grid g3">
+      <div class="card dont">
+        <div class="label-dont">Não fazer</div>
+        <div style="font-size:26px;font-weight:600;letter-spacing:.12em;color:var(--text-1)">PERSANA<span style="color:var(--accent-500)">.</span></div>
+        <p class="note">Não usar caixa alta nem alterar o tracking.</p>
+      </div>
+      <div class="card dont">
+        <div class="label-dont">Não fazer</div>
+        <div style="font-size:26px;font-weight:600;letter-spacing:-.04em;background:linear-gradient(90deg,#E5605C,#E8A33D,#34C98A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">persana.</div>
+        <p class="note">Não aplicar gradientes coloridos ou cores fora do sistema.</p>
+      </div>
+      <div class="card dont">
+        <div class="label-dont">Não fazer</div>
+        <div style="font-size:26px;font-weight:600;letter-spacing:-.04em;color:var(--text-1);text-shadow:0 3px 10px rgba(102,116,240,.9)">persana<span style="color:var(--accent-500)">.</span></div>
+        <p class="note">Não adicionar sombras, contornos ou efeitos ao wordmark.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cores">
+  <div class="wrap">
+    <div class="kicker">03 — Cor</div>
+    <h2>Sistema de cores</h2>
+    <p class="lead">Dark-first: quatro camadas de superfície criam profundidade sem sombras. O accent Iris é a única cor de marca; semânticas são reservadas a estado e nunca decoram. Clique em qualquer amostra para copiar o hex.</p>
+
+    <h3>Superfícies — elevação por camada</h3>
+    <div class="grid g4" id="sw-surfaces"></div>
+
+    <h3>Texto — três níveis de tinta</h3>
+    <div class="grid g3" id="sw-text"></div>
+
+    <h3>Accent · Iris</h3>
+    <div class="grid g4" id="sw-accent"></div>
+    <p class="note">Regra de contenção: em qualquer tela, o accent não deve ocupar mais que ~5% da área visível — botão primário, links, foco e estados ativos. O restante é neutro.</p>
+
+    <h3>Semânticas — apenas estado, nunca série de dados</h3>
+    <div class="grid g3" id="sw-semantic"></div>
+    <p class="note">Semânticas sempre acompanham ícone ou rótulo — a cor nunca carrega o significado sozinha.</p>
+
+    <h3>Modo claro — tokens equivalentes</h3>
+    <div class="grid g4" id="sw-light"></div>
+    <p class="note">O modo claro é selecionado, não invertido: mesmos papéis, valores próprios calibrados para superfície clara.</p>
+  </div>
+</section>
+
+<section id="tipografia">
+  <div class="wrap">
+    <div class="kicker">04 — Tipografia</div>
+    <h2>Tipografia</h2>
+    <p class="lead">Uma única família — Inter — em três pesos (400, 500, 600). A elegância vem da escala e do tracking negativo nos títulos, não da variedade. Números tabulares em tabelas e eixos.</p>
+    <div class="card" style="padding:8px 28px">
+      <div class="type-row"><div class="type-meta">Display<br>56 / 600 / -4%</div><div class="t-display">Precisão visível</div></div>
+      <div class="type-row"><div class="type-meta">Heading 1<br>40 / 600 / -3%</div><div class="t-h1">Clareza em escala</div></div>
+      <div class="type-row"><div class="type-meta">Heading 2<br>28 / 600 / -2%</div><div class="t-h2">Hierarquia sem esforço</div></div>
+      <div class="type-row"><div class="type-meta">Heading 3<br>20 / 600 / -1.5%</div><div class="t-h3">Seções e cartões</div></div>
+      <div class="type-row"><div class="type-meta">Body<br>15 / 400 / 1.6lh</div><div class="t-body">Texto corrido de interface e documentação. Confortável em blocos longos, com entrelinha generosa de 1.6.</div></div>
+      <div class="type-row"><div class="type-meta">Small<br>13 / 400</div><div class="t-small">Metadados, notas de apoio e descrições secundárias.</div></div>
+      <div class="type-row"><div class="type-meta">Caption<br>12 / 500 / +6%</div><div class="t-caption">Rótulos e categorias</div></div>
+    </div>
+    <p class="note">Fallback: <code>Inter, system-ui, -apple-system, "Segoe UI", sans-serif</code>. Alternativas aprovadas caso o licenciamento mude: Geist ou General Sans.</p>
+  </div>
+</section>
+
+<section id="espacamento">
+  <div class="wrap">
+    <div class="kicker">05 — Geometria</div>
+    <h2>Espaçamento, raio e elevação</h2>
+    <p class="lead">Tudo deriva de uma grade de 4px. Três raios e duas sombras cobrem 100% dos casos — mais variação que isso é ruído.</p>
+    <h3>Escala de espaçamento — base 4px</h3>
+    <div class="card">
+      <div class="space-demo">
+        <div><div class="s" style="width:4px;height:40px"></div><div class="lbl">4</div></div>
+        <div><div class="s" style="width:8px;height:40px"></div><div class="lbl">8</div></div>
+        <div><div class="s" style="width:12px;height:40px"></div><div class="lbl">12</div></div>
+        <div><div class="s" style="width:16px;height:40px"></div><div class="lbl">16</div></div>
+        <div><div class="s" style="width:24px;height:40px"></div><div class="lbl">24</div></div>
+        <div><div class="s" style="width:32px;height:40px"></div><div class="lbl">32</div></div>
+        <div><div class="s" style="width:48px;height:40px"></div><div class="lbl">48</div></div>
+        <div><div class="s" style="width:64px;height:40px"></div><div class="lbl">64</div></div>
+        <div><div class="s" style="width:96px;height:40px"></div><div class="lbl">96</div></div>
+      </div>
+    </div>
+    <h3>Raios</h3>
+    <div class="card">
+      <div class="radius-demo">
+        <div><div class="r" style="border-radius:6px"></div><div class="lbl" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-family:ui-monospace,monospace">sm · 6px<br>botões, inputs</div></div>
+        <div><div class="r" style="border-radius:10px"></div><div class="lbl" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-family:ui-monospace,monospace">md · 10px<br>cartões internos</div></div>
+        <div><div class="r" style="border-radius:16px"></div><div class="lbl" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-family:ui-monospace,monospace">lg · 16px<br>painéis, modais</div></div>
+        <div><div class="r" style="border-radius:99px;width:96px;height:40px;margin-top:28px"></div><div class="lbl" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px;font-family:ui-monospace,monospace">full · pills, badges</div></div>
+      </div>
+    </div>
+    <p class="note">Elevação: <code>shadow-1</code> (0 1px 2px, 40%) para repouso · <code>shadow-2</code> (0 8px 24px, 45%) para flutuantes. A camada de superfície faz o resto do trabalho.</p>
+  </div>
+</section>
+
+<section id="componentes">
+  <div class="wrap">
+    <div class="kicker">06 — Componentes</div>
+    <h2>Biblioteca de componentes</h2>
+    <p class="lead">Base recomendada: shadcn/ui + Radix, re-tokenizados com este sistema. Abaixo, os padrões visuais de referência.</p>
+
+    <h3>Botões</h3>
+    <div class="card" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+      <button class="btn btn-primary">Criar projeto</button>
+      <button class="btn btn-secondary">Duplicar</button>
+      <button class="btn btn-ghost">Cancelar</button>
+      <button class="btn btn-danger">Excluir</button>
+    </div>
+    <p class="note">Um único botão primário por vista. Danger nunca é primário — sempre outline, com confirmação.</p>
+
+    <h3>Formulário</h3>
+    <div class="card">
+      <div class="grid g2">
+        <div class="field">
+          <label>Nome do workspace</label>
+          <input class="input" placeholder="ex.: Equipe de Produto" value="Persana HQ">
+        </div>
+        <div class="field">
+          <label>E-mail de cobrança</label>
+          <input class="input" placeholder="voce@empresa.com">
+        </div>
+      </div>
+    </div>
+    <p class="note">Foco: borda accent + halo de 3px em <code>--accent-glow</code>. Nunca outline padrão do navegador.</p>
+
+    <h3>Badges de estado</h3>
+    <div class="card" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <span class="badge badge-ok"><span class="dot-i"></span>Ativo</span>
+      <span class="badge badge-warn"><span class="dot-i"></span>Pendente</span>
+      <span class="badge badge-neutral"><span class="dot-i"></span>Rascunho</span>
+      <span class="badge badge-accent"><span class="dot-i"></span>Beta</span>
+    </div>
+
+    <h3>Tabela</h3>
+    <div class="card" style="padding:6px 4px">
+      <table class="ui">
+        <thead><tr><th>Cliente</th><th>Plano</th><th>Status</th><th style="text-align:right">MRR</th></tr></thead>
+        <tbody>
+          <tr><td>Atlas Fintech</td><td>Enterprise</td><td><span class="badge badge-ok"><span class="dot-i"></span>Ativo</span></td><td class="num-cell" style="text-align:right">R$ 12.400</td></tr>
+          <tr><td>Loop Studio</td><td>Pro</td><td><span class="badge badge-ok"><span class="dot-i"></span>Ativo</span></td><td class="num-cell" style="text-align:right">R$ 2.180</td></tr>
+          <tr><td>Vetor Saúde</td><td>Pro</td><td><span class="badge badge-warn"><span class="dot-i"></span>Pendente</span></td><td class="num-cell" style="text-align:right">R$ 1.960</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="produto">
+  <div class="wrap">
+    <div class="kicker">07 — Aplicação</div>
+    <h2>Amostra de produto</h2>
+    <p class="lead">O sistema aplicado a uma vista de dashboard: camadas de superfície, um accent contido, dados com paleta categórica validada para daltonismo (ΔE adjacente ≥ 23 na superfície escura). Passe o cursor sobre o gráfico.</p>
+    <div class="app-frame">
+      <div class="app-top">
+        <div class="lm">persana<span class="dot">.</span></div>
+        <nav>
+          <a class="on" href="#produto" onclick="return false">Visão geral</a>
+          <a href="#produto" onclick="return false">Clientes</a>
+          <a href="#produto" onclick="return false">Relatórios</a>
+          <a href="#produto" onclick="return false">Ajustes</a>
+        </nav>
+        <div style="margin-left:auto"><button class="btn btn-primary" style="padding:6px 14px;font-size:12.5px">Novo relatório</button></div>
+      </div>
+      <div class="app-body">
+        <div class="stat-row">
+          <div class="stat"><div class="k">Receita recorrente</div><div class="v">R$ 84,2 mil</div><div class="d d-up">↑ 12,4% vs. mês anterior</div></div>
+          <div class="stat"><div class="k">Clientes ativos</div><div class="v">1.284</div><div class="d d-up">↑ 3,1% vs. mês anterior</div></div>
+          <div class="stat"><div class="k">Churn</div><div class="v">1,8%</div><div class="d d-down">↑ 0,2 p.p. vs. mês anterior</div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <h4>Receita mensal — últimos 8 meses (R$ mil)</h4>
+            <div class="legend">
+              <span><i style="background:var(--series-1)"></i>Assinaturas</span>
+              <span><i style="background:var(--series-2)"></i>Serviços</span>
+            </div>
+          </div>
+          <div id="chart-wrap">
+            <svg id="chart" width="100%" height="240" viewBox="0 0 920 240" role="img" aria-label="Gráfico de linhas: receita mensal de Assinaturas e Serviços nos últimos 8 meses"></svg>
+            <div id="tooltip"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="regras">
+  <div class="wrap">
+    <div class="kicker">08 — Aplicação correta</div>
+    <h2>Fazer e não fazer</h2>
+    <p class="lead">A disciplina de aplicação é o que separa "usa os mesmos tokens" de "parece o Persana".</p>
+    <div class="grid g2">
+      <div class="card ok">
+        <div class="label-ok">Fazer</div>
+        <ul class="dd-list yes">
+          <li>Elevar superfícies por camada (<code>bg-0 → bg-3</code>) e hairlines, não por sombras fortes.</li>
+          <li>Reservar o accent Iris para a ação primária e estados ativos — no máximo ~5% da tela.</li>
+          <li>Usar tracking negativo apenas em títulos ≥ 20px; corpo de texto fica neutro.</li>
+          <li>Manter todo espaçamento na grade de 4px e todo raio nos três tokens.</li>
+          <li>Acompanhar toda cor semântica de ícone ou rótulo textual.</li>
+        </ul>
+      </div>
+      <div class="card dont">
+        <div class="label-dont">Não fazer</div>
+        <ul class="dd-list no">
+          <li>Introduzir uma segunda cor de marca ou gradientes chamativos em fundos.</li>
+          <li>Usar cores semânticas (verde/âmbar/vermelho) como séries de gráfico.</li>
+          <li>Misturar pesos além de 400/500/600 ou adicionar uma segunda família tipográfica.</li>
+          <li>Aplicar sombras coloridas, glows fortes ou bordas de 2px+ em componentes.</li>
+          <li>Colocar dois botões primários na mesma vista.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    persana. — Guia de Identidade Visual v1.0 · Julho 2026 · Tokens prontos para CSS custom properties / Tailwind config. Paleta de dados validada (banda de luminosidade, piso de croma, separação CVD e contraste) para a superfície <span class="mono">#101014</span>.
+  </div>
+</footer>
+
+<div class="copied-toast" id="toast">Copiado</div>
+
+<script>
+/* ============ SWATCHES ============ */
+const groups = {
+  'sw-surfaces': [
+    ['bg-0 · página','#09090B'],
+    ['bg-1 · painel','#101014'],
+    ['bg-2 · cartão','#16161C'],
+    ['bg-3 · flutuante','#1D1D25'],
+  ],
+  'sw-text': [
+    ['text-1 · primário','#EEEEF2'],
+    ['text-2 · secundário','#9B9BA7'],
+    ['text-3 · mudo','#62626E'],
+  ],
+  'sw-accent': [
+    ['accent-300 · texto s/ escuro','#AEB4FA'],
+    ['accent-400 · hover','#8D95F8'],
+    ['accent-500 · primário','#6674F0'],
+    ['accent-600 · pressionado','#4F5AE0'],
+  ],
+  'sw-semantic': [
+    ['success','#34C98A'],
+    ['warning','#E8A33D'],
+    ['danger','#E5605C'],
+  ],
+  'sw-light': [
+    ['bg · página','#FAFAFB'],
+    ['surface · cartão','#FFFFFF'],
+    ['text · primário','#17171C'],
+    ['accent-600 · primário','#4F5AE0'],
+  ],
+};
+const toast = document.getElementById('toast');
+let toastTimer = null;
+for (const [id, colors] of Object.entries(groups)) {
+  const el = document.getElementById(id);
+  colors.forEach(([name, hex]) => {
+    const d = document.createElement('div');
+    d.className = 'swatch';
+    d.innerHTML = `<div class="chip" style="background:${hex};${hex==='#FFFFFF'||hex==='#FAFAFB'?'border-bottom:1px solid var(--border)':''}"></div><div class="info"><b>${name}</b><span>${hex}</span></div>`;
+    d.addEventListener('click', () => {
+      const done = () => {
+        toast.textContent = hex + ' copiado';
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(hex).then(done).catch(done);
+      } else { done(); }
+    });
+    el.appendChild(d);
+  });
+}
+
+/* ============ GRÁFICO (SVG, 2 séries, tooltip crosshair) ============ */
+const MONTHS = ['Dez','Jan','Fev','Mar','Abr','Mai','Jun','Jul'];
+const S1 = [46, 51, 49, 57, 61, 66, 72, 78];  // Assinaturas
+const S2 = [12, 14, 15, 14, 17, 19, 18, 21];  // Serviços
+const SERIES = [
+  { name: 'Assinaturas', data: S1, color: getCSS('--series-1') },
+  { name: 'Serviços',    data: S2, color: getCSS('--series-2') },
+];
+function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+const svg = document.getElementById('chart');
+const NS = 'http://www.w3.org/2000/svg';
+const W = 920, H = 240, PAD = { t: 14, r: 16, b: 30, l: 40 };
+const yMax = 90;
+const xAt = i => PAD.l + (i / (MONTHS.length - 1)) * (W - PAD.l - PAD.r);
+const yAt = v => PAD.t + (1 - v / yMax) * (H - PAD.t - PAD.b);
+function mk(tag, attrs){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+
+/* grid + eixos (recessivos) */
+[0, 30, 60, 90].forEach(v => {
+  svg.appendChild(mk('line', { x1: PAD.l, x2: W - PAD.r, y1: yAt(v), y2: yAt(v), stroke: getCSS('--border'), 'stroke-width': 1 }));
+  const t = mk('text', { x: PAD.l - 9, y: yAt(v) + 4, 'text-anchor': 'end', fill: getCSS('--text-3'), 'font-size': 11, 'font-family': 'ui-monospace,monospace' });
+  t.textContent = v; svg.appendChild(t);
+});
+MONTHS.forEach((m, i) => {
+  const t = mk('text', { x: xAt(i), y: H - 8, 'text-anchor': 'middle', fill: getCSS('--text-3'), 'font-size': 11 });
+  t.textContent = m; svg.appendChild(t);
+});
+
+/* séries: área sutil + linha 2px + marcador final + rótulo direto no último ponto */
+SERIES.forEach(s => {
+  const pts = s.data.map((v, i) => `${xAt(i)},${yAt(v)}`).join(' ');
+  const area = mk('polygon', { points: `${PAD.l},${yAt(0)} ${pts} ${xAt(MONTHS.length-1)},${yAt(0)}`, fill: s.color, opacity: 0.07 });
+  svg.appendChild(area);
+  svg.appendChild(mk('polyline', { points: pts, fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+  const li = s.data.length - 1;
+  svg.appendChild(mk('circle', { cx: xAt(li), cy: yAt(s.data[li]), r: 4, fill: s.color, stroke: getCSS('--bg-2'), 'stroke-width': 2 }));
+  const lbl = mk('text', { x: xAt(li) - 8, y: yAt(s.data[li]) - 10, 'text-anchor': 'end', fill: getCSS('--text-2'), 'font-size': 11.5, 'font-weight': 600 });
+  lbl.textContent = s.data[li]; svg.appendChild(lbl);
+});
+
+/* crosshair + tooltip */
+const cross = mk('line', { y1: PAD.t, y2: H - PAD.b, stroke: getCSS('--border-strong'), 'stroke-width': 1, opacity: 0 });
+svg.appendChild(cross);
+const hoverDots = SERIES.map(s => { const c = mk('circle', { r: 4.5, fill: s.color, stroke: getCSS('--bg-2'), 'stroke-width': 2, opacity: 0 }); svg.appendChild(c); return c; });
+const tip = document.getElementById('tooltip');
+const wrapEl = document.getElementById('chart-wrap');
+
+svg.addEventListener('mousemove', ev => {
+  const r = svg.getBoundingClientRect();
+  const sx = (ev.clientX - r.left) * (W / r.width);
+  let idx = Math.round(((sx - PAD.l) / (W - PAD.l - PAD.r)) * (MONTHS.length - 1));
+  idx = Math.max(0, Math.min(MONTHS.length - 1, idx));
+  const cx = xAt(idx);
+  cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('opacity', 1);
+  SERIES.forEach((s, si) => { hoverDots[si].setAttribute('cx', cx); hoverDots[si].setAttribute('cy', yAt(s.data[idx])); hoverDots[si].setAttribute('opacity', 1); });
+  tip.innerHTML = `<b>${MONTHS[idx]} · 2026</b>` + SERIES.map(s =>
+    `<div class="row"><i style="background:${s.color}"></i>${s.name}<span class="val">R$ ${s.data[idx]} mil</span></div>`).join('');
+  const wr = wrapEl.getBoundingClientRect();
+  const px = (cx / W) * wr.width;
+  tip.style.left = Math.min(px + 14, wr.width - tip.offsetWidth - 8) + 'px';
+  tip.style.top = '18px';
+  tip.style.opacity = 1;
+});
+svg.addEventListener('mouseleave', () => {
+  cross.setAttribute('opacity', 0);
+  hoverDots.forEach(d => d.setAttribute('opacity', 0));
+  tip.style.opacity = 0;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Persana — Comparativo de Direções Visuais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;background:#0D0D10;color:#EEEEF2;-webkit-font-smoothing:antialiased;line-height:1.6}
+  .intro{max-width:980px;margin:0 auto;padding:72px 32px 40px}
+  .intro .k{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8D95F8;margin-bottom:12px}
+  .intro h1{font-size:32px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+  .intro p{color:#9B9BA7;max-width:660px;font-size:15.5px}
+  .panel{padding:72px 32px;border-top:1px solid rgba(255,255,255,.08)}
+  .panel-inner{max-width:980px;margin:0 auto}
+  .tag-row{display:flex;align-items:center;gap:12px;margin-bottom:36px;flex-wrap:wrap}
+  .dir-num{font-size:11px;font-weight:600;letter-spacing:.12em;padding:4px 12px;border-radius:99px}
+  .dir-name{font-size:18px;font-weight:600;letter-spacing:-.01em}
+  .dir-refs{font-size:12.5px;margin-left:auto;opacity:.65}
+  .stage{border-radius:20px;overflow:hidden;border:1px solid}
+  .mini-hero{padding:56px 48px 48px;position:relative;overflow:hidden}
+  .mini-hero .wm{font-size:34px;font-weight:600;letter-spacing:-.04em;position:relative;z-index:1}
+  .mini-hero h2{font-size:34px;line-height:1.15;margin:22px 0 12px;max-width:480px;position:relative;z-index:1}
+  .mini-hero p{font-size:15px;max-width:430px;position:relative;z-index:1}
+  .mini-hero .cta{margin-top:26px;display:flex;gap:12px;position:relative;z-index:1}
+  .b{display:inline-block;font-size:13.5px;font-weight:500;padding:10px 20px;border-radius:8px;cursor:default;font-family:'Inter',sans-serif}
+  .ui-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:0 48px 48px;position:relative;z-index:1}
+  @media(max-width:760px){.ui-strip{grid-template-columns:1fr}.mini-hero{padding:40px 28px 36px}.ui-strip{padding:0 28px 36px}}
+  .tile{border-radius:12px;padding:16px 18px;border:1px solid}
+  .tile .tk{font-size:12px;margin-bottom:5px}
+  .tile .tv{font-size:24px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .tile .td{font-size:12px;margin-top:5px}
+  .verdict{font-size:13.5px;margin-top:20px;line-height:1.65;max-width:760px}
+  .verdict b{font-weight:600}
+
+  /* ===== 1 · MINIMALISTA (v1.0 atual) ===== */
+  .p1{background:#09090B}
+  .p1 .dir-num{background:rgba(102,116,240,.14);color:#AEB4FA}
+  .p1 .dir-refs,.p1 .verdict{color:#9B9BA7}
+  .p1 .stage{background:#101014;border-color:rgba(255,255,255,.08)}
+  .p1 .wm{color:#EEEEF2}.p1 .wm i{font-style:normal;color:#6674F0}
+  .p1 h2{font-weight:600;letter-spacing:-.03em;color:#EEEEF2}
+  .p1 .mini-hero p{color:#9B9BA7}
+  .p1 .b1{background:#6674F0;color:#fff}
+  .p1 .b2{background:#16161C;color:#EEEEF2;border:1px solid rgba(255,255,255,.14)}
+  .p1 .tile{background:#16161C;border-color:rgba(255,255,255,.08)}
+  .p1 .tk{color:#62626E}.p1 .tv{color:#EEEEF2}.p1 .td{color:#34C98A}
+
+  /* ===== 2 · EDITORIAL REFINADO ===== */
+  .p2{background:#FBFAF7;color:#191817}
+  .p2 .dir-num{background:#191817;color:#FBFAF7}
+  .p2 .dir-name{color:#191817}
+  .p2 .dir-refs,.p2 .verdict{color:#6E6A62}
+  .p2 .stage{background:#FFFFFF;border-color:rgba(25,24,23,.12);box-shadow:0 1px 2px rgba(25,24,23,.05)}
+  .p2 .wm{font-family:'Source Serif 4',Georgia,serif;font-weight:600;letter-spacing:-.02em;color:#191817}
+  .p2 .wm i{font-style:normal;color:#1D4ED8}
+  .p2 h2{font-family:'Source Serif 4',Georgia,serif;font-weight:400;letter-spacing:-.01em;font-size:38px;color:#191817}
+  .p2 .mini-hero p{color:#57534B}
+  .p2 .b1{background:#191817;color:#FBFAF7;border-radius:6px}
+  .p2 .b2{background:transparent;color:#191817;border:1px solid rgba(25,24,23,.25);border-radius:6px}
+  .p2 .tile{background:#FBFAF7;border-color:rgba(25,24,23,.1)}
+  .p2 .tk{color:#8A857B}.p2 .tv{color:#191817;font-family:'Source Serif 4',Georgia,serif;font-weight:600}.p2 .td{color:#116B3F}
+  .p2 .mini-hero{border-bottom:1px solid rgba(25,24,23,.07)}
+  .p2 .ui-strip{padding-top:36px}
+
+  /* ===== 3 · HUMANISTA ACOLHEDOR ===== */
+  .p3{background:#F2EDE4;color:#2A2520}
+  .p3 .dir-num{background:#C6613F;color:#FDF9F2}
+  .p3 .dir-name{color:#2A2520}
+  .p3 .dir-refs,.p3 .verdict{color:#7A7062}
+  .p3 .stage{background:#FDF9F2;border-color:rgba(42,37,32,.1)}
+  .p3 .wm{font-weight:600;letter-spacing:-.035em;color:#2A2520}
+  .p3 .wm i{font-style:normal;color:#C6613F}
+  .p3 h2{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-.01em;font-size:37px;color:#2A2520}
+  .p3 .mini-hero p{color:#6B6154}
+  .p3 .mini-hero{background:radial-gradient(1100px 340px at 85% -60%,rgba(198,97,63,.12),transparent 65%)}
+  .p3 .b1{background:#C6613F;color:#FDF9F2;border-radius:99px}
+  .p3 .b2{background:transparent;color:#2A2520;border:1.5px solid rgba(42,37,32,.22);border-radius:99px}
+  .p3 .tile{background:#F7F1E6;border-color:rgba(42,37,32,.09);border-radius:16px}
+  .p3 .tk{color:#9A8F7E}.p3 .tv{color:#2A2520}.p3 .td{color:#3E7C4F}
+
+  /* ===== 4 · AURORA TECH ===== */
+  .p4{background:#09090B}
+  .p4 .dir-num{background:linear-gradient(90deg,#6674F0,#B44FD8);color:#fff}
+  .p4 .dir-refs,.p4 .verdict{color:#9B9BA7}
+  .p4 .stage{background:#0D0D12;border-color:rgba(255,255,255,.1)}
+  .p4 .mini-hero{background:
+    radial-gradient(700px 300px at 20% -35%,rgba(102,116,240,.32),transparent 65%),
+    radial-gradient(600px 280px at 75% -30%,rgba(180,79,216,.24),transparent 65%),
+    radial-gradient(500px 260px at 55% -20%,rgba(34,197,194,.14),transparent 60%)}
+  .p4 .wm{color:#F2F2F7}.p4 .wm i{font-style:normal;background:linear-gradient(90deg,#8D95F8,#D888F0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .p4 h2{font-weight:600;letter-spacing:-.03em;color:#F2F2F7}
+  .p4 h2 .g{background:linear-gradient(90deg,#8D95F8 0%,#D888F0 55%,#5BD9D5 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .p4 .mini-hero p{color:#A5A5B3}
+  .p4 .b1{background:linear-gradient(90deg,#6674F0,#9A5CE8);color:#fff;border-radius:8px}
+  .p4 .b2{background:rgba(255,255,255,.06);color:#F2F2F7;border:1px solid rgba(255,255,255,.14);border-radius:8px;backdrop-filter:blur(6px)}
+  .p4 .tile{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.1);backdrop-filter:blur(8px)}
+  .p4 .tk{color:#71717E}.p4 .tv{color:#F2F2F7}.p4 .td{color:#4ADE9C}
+
+  .closing{max-width:980px;margin:0 auto;padding:56px 32px 80px;border-top:1px solid rgba(255,255,255,.08)}
+  .closing h3{font-size:18px;font-weight:600;margin-bottom:12px;letter-spacing:-.01em}
+  .closing p{color:#9B9BA7;font-size:14.5px;max-width:720px}
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <div class="k">Persana · Estudo de direção visual</div>
+  <h1>Quatro direções, a mesma tela</h1>
+  <p>O mesmo hero e os mesmos indicadores do Persana, renderizados em quatro linguagens visuais modernas e elegantes. Compare a sensação, não os detalhes — cada direção viraria um guia completo como a v1.0.</p>
+</div>
+
+<!-- ============ 1 · MINIMALISTA PREMIUM ============ -->
+<div class="panel p1">
+  <div class="panel-inner">
+    <div class="tag-row">
+      <span class="dir-num">01</span>
+      <span class="dir-name">Minimalista premium — a v1.0 atual</span>
+      <span class="dir-refs">Referências: linear.app · vercel.com</span>
+    </div>
+    <div class="stage">
+      <div class="mini-hero">
+        <div class="wm">persana<i>.</i></div>
+        <h2>Clareza que vira velocidade.</h2>
+        <p>O workspace que a sua equipe abre de manhã e esquece que é software.</p>
+        <div class="cta"><span class="b b1">Começar agora</span><span class="b b2">Ver demonstração</span></div>
+      </div>
+      <div class="ui-strip">
+        <div class="tile"><div class="tk">Receita recorrente</div><div class="tv">R$ 84,2 mil</div><div class="td">↑ 12,4% no mês</div></div>
+        <div class="tile"><div class="tk">Clientes ativos</div><div class="tv">1.284</div><div class="td">↑ 3,1% no mês</div></div>
+        <div class="tile"><div class="tk">Satisfação</div><div class="tv">96%</div><div class="td">↑ 1,2 p.p. no mês</div></div>
+      </div>
+    </div>
+    <p class="verdict"><b>Sensação:</b> precisão, engenharia, foco. Fala baixo e transmite competência. É a linguagem dominante em dev tools e produtividade — elegante, porém cada vez mais comum no segmento.</p>
+  </div>
+</div>
+
+<!-- ============ 2 · EDITORIAL REFINADO ============ -->
+<div class="panel p2">
+  <div class="panel-inner">
+    <div class="tag-row">
+      <span class="dir-num">02</span>
+      <span class="dir-name">Editorial refinado</span>
+      <span class="dir-refs">Referências: mercury.com · press.stripe.com · ghost.org</span>
+    </div>
+    <div class="stage">
+      <div class="mini-hero">
+        <div class="wm">persana<i>.</i></div>
+        <h2>Clareza que vira velocidade.</h2>
+        <p>O workspace que a sua equipe abre de manhã e esquece que é software.</p>
+        <div class="cta"><span class="b b1">Começar agora</span><span class="b b2">Ver demonstração</span></div>
+      </div>
+      <div class="ui-strip">
+        <div class="tile"><div class="tk">Receita recorrente</div><div class="tv">R$ 84,2 mil</div><div class="td">↑ 12,4% no mês</div></div>
+        <div class="tile"><div class="tk">Clientes ativos</div><div class="tv">1.284</div><div class="td">↑ 3,1% no mês</div></div>
+        <div class="tile"><div class="tk">Satisfação</div><div class="tv">96%</div><div class="td">↑ 1,2 p.p. no mês</div></div>
+      </div>
+    </div>
+    <p class="verdict"><b>Sensação:</b> instituição séria com bom gosto — a serifa nos títulos e números dá peso editorial, o fundo papel dá calma. É a direção que mais transmite confiança e maturidade; favorita de fintechs e produtos B2B de ticket alto.</p>
+  </div>
+</div>
+
+<!-- ============ 3 · HUMANISTA ACOLHEDOR ============ -->
+<div class="panel p3">
+  <div class="panel-inner">
+    <div class="tag-row">
+      <span class="dir-num">03</span>
+      <span class="dir-name">Humanista acolhedor</span>
+      <span class="dir-refs">Referências: anthropic.com · intercom.com · headspace.com</span>
+    </div>
+    <div class="stage">
+      <div class="mini-hero">
+        <div class="wm">persana<i>.</i></div>
+        <h2>Clareza que vira velocidade.</h2>
+        <p>O workspace que a sua equipe abre de manhã e esquece que é software.</p>
+        <div class="cta"><span class="b b1">Começar agora</span><span class="b b2">Ver demonstração</span></div>
+      </div>
+      <div class="ui-strip">
+        <div class="tile"><div class="tk">Receita recorrente</div><div class="tv">R$ 84,2 mil</div><div class="td">↑ 12,4% no mês</div></div>
+        <div class="tile"><div class="tk">Clientes ativos</div><div class="tv">1.284</div><div class="td">↑ 3,1% no mês</div></div>
+        <div class="tile"><div class="tk">Satisfação</div><div class="tv">96%</div><div class="td">↑ 1,2 p.p. no mês</div></div>
+      </div>
+    </div>
+    <p class="verdict"><b>Sensação:</b> feito por gente, para gente. O creme no lugar do branco puro, o terracota e os cantos arredondados tiram a frieza do software. Ideal se o Persana toca pessoas — RH, saúde, educação, comunidade — ou quer se opor ao visual "tech genérico".</p>
+  </div>
+</div>
+
+<!-- ============ 4 · AURORA TECH ============ -->
+<div class="panel p4">
+  <div class="panel-inner">
+    <div class="tag-row">
+      <span class="dir-num">04</span>
+      <span class="dir-name">Aurora tech</span>
+      <span class="dir-refs">Referências: raycast.com · reflect.app · resend.com</span>
+    </div>
+    <div class="stage">
+      <div class="mini-hero">
+        <div class="wm">persana<i>.</i></div>
+        <h2>Clareza que vira <span class="g">velocidade</span>.</h2>
+        <p>O workspace que a sua equipe abre de manhã e esquece que é software.</p>
+        <div class="cta"><span class="b b1">Começar agora</span><span class="b b2">Ver demonstração</span></div>
+      </div>
+      <div class="ui-strip">
+        <div class="tile"><div class="tk">Receita recorrente</div><div class="tv">R$ 84,2 mil</div><div class="td">↑ 12,4% no mês</div></div>
+        <div class="tile"><div class="tk">Clientes ativos</div><div class="tv">1.284</div><div class="td">↑ 3,1% no mês</div></div>
+        <div class="tile"><div class="tk">Satisfação</div><div class="tv">96%</div><div class="td">↑ 1,2 p.p. no mês</div></div>
+      </div>
+    </div>
+    <p class="verdict"><b>Sensação:</b> a evolução emocional da v1.0 — o gradiente aurora aparece no hero e nos momentos de marca, enquanto a UI interna continua sóbria e escura. Maior impacto visual com o menor retrabalho: ~80% do guia atual permanece válido.</p>
+  </div>
+</div>
+
+<div class="closing">
+  <h3>Como decidir</h3>
+  <p>Abra as referências reais de cada direção em uma aba e pergunte: "qual dessas empresas eu queria que o Persana parecesse ser?" A resposta certa depende menos de estética e mais de posicionamento — quem é o comprador, qual promessa a marca faz, e de quem você quer se diferenciar. Escolhida a direção, eu expando para um guia completo como a v1.0: tokens, tipografia, componentes e amostra de produto.</p>
+</div>
+
+</body>
+</html>
