@@ -1,0 +1,463 @@
+/**
+ * Registro canônico dos módulos do Persana (SaaS Clínico).
+ *
+ * Fonte da auditoria: STATUS SaaS Clínico (memória) + routers reais do backend
+ * FastAPI (`PycharmProjects\saas-clinico\src\app\modules\*.py`, main.py com 22 routers).
+ * Este arquivo é a "auditoria como dado": as páginas /modulos são geradas dele.
+ *
+ * Ao evoluir um módulo (deploy, UI portada, lacuna fechada), atualizar AQUI —
+ * o site reflete na hora.
+ */
+
+export type ModuleStatus = "live" | "pronto" | "parcial" | "planejado";
+
+export const STATUS_META: Record<
+  ModuleStatus,
+  { label: string; badge: "ok" | "accent" | "warn" | "neutral" }
+> = {
+  live: { label: "Live no VPS", badge: "ok" },
+  pronto: { label: "Código pronto — não deployado", badge: "accent" },
+  parcial: { label: "Live com lacuna estrutural", badge: "warn" },
+  planejado: { label: "Planejado — sem código", badge: "neutral" },
+};
+
+/** POC atual (box Hostinger, dado fake, HTTP). Substituído por persana.com.br na F6. */
+export const POC_BASE = "http://2.25.162.171";
+
+export interface PersanaModule {
+  slug: string;
+  nome: string;
+  grupo: string;
+  resumo: string;
+  status: ModuleStatus;
+  /** Arquivo(s) do router no backend, para rastreio. */
+  backend?: string;
+  /** Rotas/capacidades principais já existentes na API. */
+  entregue: string[];
+  /** O que falta para o módulo ser "produto". */
+  faltas: string[];
+  /** UI atual (POC inline no FastAPI), se houver. */
+  pocPath?: string;
+  /** Estado do front no Persana (mundo Tinta). */
+  frontPersana: "nenhum" | "parcial" | "pronto";
+}
+
+export const GRUPOS = [
+  "Jornada clínica",
+  "Exames & dados",
+  "Motor terapêutico",
+  "Prescrição & farmácia",
+  "Plataforma",
+  "Planejados (spec v3)",
+] as const;
+
+export const MODULES: PersanaModule[] = [
+  // ───────────────────────────── Jornada clínica ─────────────────────────────
+  {
+    slug: "pacientes",
+    nome: "Pacientes",
+    grupo: "Jornada clínica",
+    resumo: "Cadastro de pacientes multi-tenant (RLS FORCE por clínica).",
+    status: "live",
+    backend: "modules/patients.py",
+    entregue: ["CRUD de pacientes sob RLS", "CPF cifrado (migration 019, Fernet)"],
+    faltas: ["UI de gestão de pacientes no Persana", "Busca/listagem com filtros"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "consentimentos",
+    nome: "Consentimentos",
+    grupo: "Jornada clínica",
+    resumo:
+      "Consentimentos LGPD (foto biométrica, gravação de áudio) com hash sha256.",
+    status: "live",
+    backend: "modules/consents.py",
+    entregue: ["Registro e verificação de consentimento", "Gates 403 nos módulos que exigem"],
+    faltas: ["UI de coleta/gestão de consentimentos"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "anamnese",
+    nome: "Anamnese modular",
+    grupo: "Jornada clínica",
+    resumo:
+      "Anamnese FHIR R4 por objetivos terapêuticos: 64 objetivos, instrumentos validados, red flags.",
+    status: "live",
+    backend: "modules/anamnese.py",
+    entregue: [
+      "Catálogo de 64 objetivos + 50 perguntas + 83 vínculos",
+      "Instrumentos PHQ-9 / GAD-7 / AUDIT / SCOFF com scoring",
+      "Red flag crítica PHQ-9 item 9 (hardcoded por design)",
+      "Questionário composto FHIR + export clínico (RBAC)",
+    ],
+    faltas: [
+      "Red flags do seed detalhado ainda em prosa (condição jsonb placeholder)",
+      "UI de preenchimento da anamnese no Persana",
+    ],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "atendimento",
+    nome: "Atendimento (consulta gravada)",
+    grupo: "Jornada clínica",
+    resumo:
+      "Encounter completo: gravação com consentimento, transcrição Whisper, extração SOAP/CID-10 por IA, assinatura do médico.",
+    status: "live",
+    backend: "modules/atendimento.py",
+    entregue: [
+      "Gate de consentimento de gravação (retenção 90d)",
+      "STT real via Whisper (pt-BR) + rotulação médico/paciente",
+      "Extração IA: queixas, CID-10 sugerido, follow-ups, SOAP de apoio",
+      "Assinatura do médico → prontuário oficial versionado + hash",
+    ],
+    faltas: ["Diarização real (Deepgram)", "UI de atendimento no Persana"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "prontuario",
+    nome: "Prontuário & evolução",
+    grupo: "Jornada clínica",
+    resumo:
+      "Prontuário oficial versionado com hash + evolução clínica. Escrita oficial só por ato assinado do médico.",
+    status: "live",
+    backend: "modules/prontuario.py · modules/evolucao.py",
+    entregue: ["medical_records versionado + hash", "Evolução clínica por paciente"],
+    faltas: ["UI de leitura/navegação do prontuário no Persana"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "documentos",
+    nome: "Documentos clínicos",
+    grupo: "Jornada clínica",
+    resumo: "Atestados, relatórios e encaminhamentos (migration 010_docs).",
+    status: "live",
+    backend: "modules/documentos.py",
+    entregue: ["Emissão de atestado / relatório / encaminhamento via API"],
+    faltas: ["Render PDF com branding", "UI de emissão no Persana"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "consulta",
+    nome: "Tela de consulta (embed MEMED)",
+    grupo: "Jornada clínica",
+    resumo:
+      "Página /consulta/{paciente}: embed MEMED tela cheia, login+MFA, captura de eventos de prescrição, CPF decifrado transiente.",
+    status: "pronto",
+    backend: "modules/consulta.py",
+    entregue: [
+      "Embed MEMED tela cheia (featureToggle + forceSign ICP-Brasil)",
+      "Captura de eventos → verificação server-side",
+      "CPF cifrado em repouso; payload-set-paciente transiente",
+    ],
+    faltas: [
+      "Deploy F6 no VPS (sobe junto com migrations 018+019)",
+      "Portar do React inline para o Persana (mundo Tinta)",
+    ],
+    pocPath: "/consulta",
+    frontPersana: "nenhum",
+  },
+
+  // ───────────────────────────── Exames & dados ─────────────────────────────
+  {
+    slug: "exames",
+    nome: "Exames laboratoriais",
+    grupo: "Exames & dados",
+    resumo:
+      "Upload de PDF/imagem, extração por IA, histórico longitudinal, LOINC + 604 marcadores com faixa funcional.",
+    status: "live",
+    backend: "modules/exames.py",
+    entregue: [
+      "Extração IA validada em golden set: recall 100%, valor 100%, unidade 95%",
+      "Histórico longitudinal por analito",
+      "LOINC 2.82 (1.519 exames) + 604 marcadores (90% de mapeamento)",
+      "Flag funcional ideal/subótimo/fora por sexo",
+      "Confirmação médica obrigatória (invariante de ouro)",
+    ],
+    faltas: [
+      "Faixa de referência ausente em ~27% (resgate por sexo/idade)",
+      "Normalização/conversão de unidades",
+      "UI definitiva de exames no Persana (viewer é POC)",
+    ],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "viewer",
+    nome: "Visualizador de tendências",
+    grupo: "Exames & dados",
+    resumo:
+      "POC de gráfico de tendência por analito (valor × data, faixa de referência, flags coloridas).",
+    status: "live",
+    backend: "modules/viewer.py",
+    entregue: ["Página única live: login → paciente → analito → gráfico + tabela"],
+    faltas: [
+      "Portar para o Persana como componente Tinta (substitui o Chart.js CDN)",
+      "É o candidato natural a 1º módulo lapidado no novo front",
+    ],
+    pocPath: "/viewer",
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "questionarios",
+    nome: "Questionários",
+    grupo: "Exames & dados",
+    resumo:
+      "Respostas de questionários com foto + timestamp + hash sha256 (comprovação de autoria).",
+    status: "live",
+    backend: "modules/questionarios.py",
+    entregue: ["Registro com não-repúdio", "Gate de consentimento foto_biometrica"],
+    faltas: ["UI de aplicação de questionários"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "memoria",
+    nome: "Memory Engine (rapport)",
+    grupo: "Exames & dados",
+    resumo:
+      "Memória do paciente em 7 categorias (família, trabalho, objetivos…) extraída por IA e aprovada pelo médico.",
+    status: "live",
+    backend: "modules/memory.py",
+    entregue: [
+      "Extração de rapport via IA → pendente → aprovação do médico",
+      "Exclusão LGPD",
+    ],
+    faltas: ["UI de rapport integrada à tela de consulta"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "fhir",
+    nome: "API FHIR",
+    grupo: "Exames & dados",
+    resumo: "Interface FHIR R4 sobre prontuário e documentos (interoperabilidade).",
+    status: "live",
+    backend: "modules/fhir_api.py",
+    entregue: ["Endpoints FHIR sobre os recursos clínicos"],
+    faltas: ["Mapear cobertura real de recursos (construído por sessão paralela)"],
+    frontPersana: "nenhum",
+  },
+
+  // ──────────────────────────── Motor terapêutico ────────────────────────────
+  {
+    slug: "protocolos",
+    nome: "Protocol Engine",
+    grupo: "Motor terapêutico",
+    resumo:
+      "Protocolos clínicos como produto do médico: sugestão só da biblioteca curada, máquina de estados, métrica N2.",
+    status: "parcial",
+    backend: "modules/protocolo.py",
+    entregue: [
+      "Máquina de estados sugerido→ativo→concluído (aprovação médica obrigatória)",
+      "Agente seleciona SÓ da biblioteca (anti-alucinação, 422 sem match)",
+      "N2 instrumentado (eventos de jornada)",
+    ],
+    faltas: [
+      "Biblioteca clinical_protocols VAZIA → /protocolo/sugerir retorna 409",
+      "Curadoria humana dos ~25 candidatos (BIBLIOTECA_PROTOCOLOS_candidatos.md) → seed",
+      "UI de protocolos no Persana",
+    ],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "formulas",
+    nome: "Formula Engine",
+    grupo: "Motor terapêutico",
+    resumo:
+      "Sugestão de formulação magistral ancorada em achados reais (analitos fora de faixa + objetivos + anamnese), com checagem de interações.",
+    status: "parcial",
+    backend: "modules/formula.py",
+    entregue: [
+      "Sugerir → aprovar (médico) → prescrever em 1 clique",
+      "Gate farmacêutico exige interações checadas",
+    ],
+    faltas: [
+      "suggest_formulas (ponte protocolo→fórmula) = NotImplementedError (Slice 3)",
+      "Assinatura da receita: resolvida via MEMED — depende do deploy F6",
+      "UI no Persana",
+    ],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "dietas",
+    nome: "Motor de dietas",
+    grupo: "Motor terapêutico",
+    resumo:
+      "24 modelos de dieta ancorados em literatura (DOI/PMID) + camada comportamental (10 perfis, 180 mensagens) + personalização por regras.",
+    status: "live",
+    backend: "modules/dieta.py · modules/diet_templates.py",
+    entregue: [
+      "24 templates (64 objetivos), status rascunho + REVISAR",
+      "10 perfis comportamentais + questionário TTM + 180 mensagens",
+      "Personalização com 10 regras auditáveis (regras_disparadas)",
+      "Render por audiência: médico / nutricionista / paciente (sem vazar técnica)",
+      "5 gates build-failing (completude, publicação, pediátrico, termos proibidos)",
+    ],
+    faltas: [
+      "Curadoria profissional dos [FUNDAMENTAR] antes de publicar",
+      "UI de dietas no Persana",
+    ],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "materiais",
+    nome: "Materiais do paciente (white-label)",
+    grupo: "Motor terapêutico",
+    resumo:
+      "Material leigo de apresentação com branding em 2 níveis (clínica → médico), validado pelo ComplianceGate.",
+    status: "live",
+    backend: "modules/material.py",
+    entregue: [
+      "Branding clínica + override por médico (resolve_branding)",
+      "Gerar → compliance (termos proibidos) → aprovar → render com identidade",
+    ],
+    faltas: ["Render PDF (hoje devolve JSON + branding)", "UI no Persana"],
+    frontPersana: "nenhum",
+  },
+
+  // ─────────────────────────── Prescrição & farmácia ───────────────────────────
+  {
+    slug: "memed",
+    nome: "Prescrição digital (MEMED)",
+    grupo: "Prescrição & farmácia",
+    resumo:
+      "Integração MEMED completa: prescritores espelho, verificação server-side anti-forjadura, reconciliação, assinatura ICP-Brasil.",
+    status: "pronto",
+    backend: "modules/memed.py",
+    entregue: [
+      "F1–F5 completas: client, migrations 018, captura verificada, ponte farmácia",
+      "Payload real capturado em homolog + schema congelado (8 golden tests)",
+      "Suite 258 passed — único ponto que flipa status='assinada' é verificação na API",
+    ],
+    faltas: [
+      "F6: deploy VPS (018+019, PATIENT_CPF_KEY, DNS persana.com.br + Caddy)",
+      "Leo: assinar Termo de Adesão (contato@minaspharma.com.br) + pedir DPA",
+      "Usuário avaliacao.memed + paciente demo → submeter form parceiro",
+    ],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "farmacia",
+    nome: "Ponte farmácia (pedidos)",
+    grupo: "Prescrição & farmácia",
+    resumo:
+      "pharmacy_orders: criado → enviado → em produção → pronto → dispensado. Fulfillment na Minas Pharma.",
+    status: "parcial",
+    backend: "modules/farmacia.py",
+    entregue: [
+      "Máquina de estados de fulfillment (FK prescriptions)",
+      "Auto-sugestão de pedido ao verificar Rx com manipulado (F5, idempotente)",
+    ],
+    faltas: [
+      "Hook auto-sugerido sem teste de DB real (exercitar no smoke F6)",
+      "Integração real cotação→pagamento→produção→tracking (toca LR↔FF — protocolo próprio)",
+      "UI de acompanhamento no Persana",
+    ],
+    frontPersana: "nenhum",
+  },
+
+  // ───────────────────────────────── Plataforma ─────────────────────────────────
+  {
+    slug: "auth",
+    nome: "Auth & RBAC",
+    grupo: "Plataforma",
+    resumo: "OAuth2/JWT + MFA TOTP + 6 perfis. App conecta NOSUPERUSER; tenant por transação.",
+    status: "live",
+    backend: "modules/auth.py",
+    entregue: ["Login JWT + MFA", "RBAC 6 perfis provado (403 em rota clínica)"],
+    faltas: ["Tela de login no Persana (hoje inline nos POCs)"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "console-medico",
+    nome: "Console do médico (POC)",
+    grupo: "Plataforma",
+    resumo:
+      "SPA POC live: pendências (exames + memória), rascunho SOAP, editar e assinar. Destino: ser absorvido pelo app Persana.",
+    status: "live",
+    backend: "modules/medico.py",
+    entregue: ["Fluxo completo login MFA → paciente → rascunho → assinar"],
+    faltas: [
+      "Substituir pelo app Persana (mundo Tinta) — este POC é o mapa do que portar",
+    ],
+    pocPath: "/medico",
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "content-registry",
+    nome: "Content Registry",
+    grupo: "Plataforma",
+    resumo:
+      "Base de conhecimento global (sem RLS): 9.010 itens ingeridos (fórmulas, protocolos, substâncias, dietas).",
+    status: "live",
+    backend: "migrations 016/017 + platform/content/",
+    entregue: [
+      "9.010 itens SC/medint ingeridos, idempotência provada",
+      "Fingerprint + matcher + scrub de PII",
+    ],
+    faltas: [
+      "Extrator LLM vivo (Farmácia Amy 55MB, Maria Rocha 3 fascículos)",
+      "Adaptadores incrementais (protocolos_modelo, medicines 15.800, curso injetáveis)",
+      "Curadoria de slugs duplicados (dedup por fingerprint + supersedes)",
+    ],
+    frontPersana: "nenhum",
+  },
+
+  // ─────────────────────────── Planejados (spec v3) ───────────────────────────
+  {
+    slug: "dashboard-roi",
+    nome: "Dashboard ROI do médico",
+    grupo: "Planejados (spec v3)",
+    resumo:
+      "S.18: retorno do médico por protocolo/jornada (sem exibir receita da farmácia, sem comissão por prescrição).",
+    status: "planejado",
+    entregue: [],
+    faltas: [
+      "Todo o módulo — o dashboard atual do Persana é o esqueleto visual dele",
+      "North Star N1–N6 instrumentadas ponta a ponta (N2 já emite eventos)",
+    ],
+    frontPersana: "parcial",
+  },
+  {
+    slug: "automacoes",
+    nome: "Automações da jornada",
+    grupo: "Planejados (spec v3)",
+    resumo: "S.17: 9 automações auditáveis da jornada do paciente (meta N5 ≥ 80%).",
+    status: "planejado",
+    entregue: [],
+    faltas: ["Todo o módulo (depende de biblioteca de protocolos viva)"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "whatsapp-clinica",
+    nome: "WhatsApp da clínica",
+    grupo: "Planejados (spec v3)",
+    resumo:
+      "R5: stack da Carol reusada como INSTÂNCIA ISOLADA por tenant (credenciais/número/fila próprios).",
+    status: "planejado",
+    entregue: [],
+    faltas: ["Todo o módulo — exige /preflight whatsapp ao codar"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "digital-twin",
+    nome: "Digital Twin / wearables",
+    grupo: "Planejados (spec v3)",
+    resumo: "Fase 4 da spec — ADIADA por decisão (prioridade é o loop de receita 3A).",
+    status: "planejado",
+    entregue: [],
+    faltas: ["Adiado — não iniciar sem decisão explícita"],
+    frontPersana: "nenhum",
+  },
+];
+
+export function modulesByGroup(): Array<{
+  grupo: string;
+  modules: PersanaModule[];
+}> {
+  return GRUPOS.map((grupo) => ({
+    grupo,
+    modules: MODULES.filter((m) => m.grupo === grupo),
+  })).filter((g) => g.modules.length > 0);
+}
+
+export function getModule(slug: string): PersanaModule | undefined {
+  return MODULES.find((m) => m.slug === slug);
+}

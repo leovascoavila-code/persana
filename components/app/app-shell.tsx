@@ -2,13 +2,20 @@ import Link from "next/link";
 import { Logo } from "@/components/marketing/logo";
 
 const TABS = [
-  { label: "Visão geral", href: "/dashboard", active: true },
-  { label: "Clientes", href: "#" },
-  { label: "Relatórios", href: "#" },
-];
+  { key: "dashboard", label: "Visão geral", href: "/dashboard" },
+  { key: "modulos", label: "Módulos", href: "/modulos" },
+] as const;
+
+export type AppTab = (typeof TABS)[number]["key"];
 
 /** Casca do app (mundo Tinta): topbar + área de conteúdo. */
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  active = "dashboard",
+}: {
+  children: React.ReactNode;
+  active?: AppTab;
+}) {
   return (
     <div className="flex min-h-screen flex-col bg-bg-0">
       <header className="sticky top-0 z-40 border-b border-border bg-bg-1/90 backdrop-blur-md">
@@ -19,11 +26,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <nav className="ml-3.5 flex gap-1">
             {TABS.map((t) => (
               <Link
-                key={t.label}
+                key={t.key}
                 href={t.href}
-                aria-current={t.active ? "page" : undefined}
+                aria-current={t.key === active ? "page" : undefined}
                 className={
-                  t.active
+                  t.key === active
                     ? "rounded-sm bg-bg-2 px-[11px] py-[5px] text-[12.5px] text-text-1"
                     : "rounded-sm px-[11px] py-[5px] text-[12.5px] text-text-3 transition-colors hover:text-text-1"
                 }
