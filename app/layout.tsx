@@ -3,9 +3,9 @@ import { spectral, manrope } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Persana — clareza que vira velocidade",
+  title: "Persana — o copiloto clínico da medicina personalizada",
   description:
-    "O workspace que a sua equipe abre de manhã e esquece que é software. Menos ruído, mais trabalho feito.",
+    "O sistema operacional da clínica de medicina personalizada: anamnese, exames, protocolos e prescrição digital num só fluxo. A IA estrutura e sugere — o médico revisa, aprova e assina.",
 };
 
 export default function RootLayout({

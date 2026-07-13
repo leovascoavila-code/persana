@@ -3,10 +3,9 @@ import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 
 const LINKS = [
-  { label: "Produto", href: "#" },
-  { label: "Soluções", href: "#" },
-  { label: "Preços", href: "#" },
-  { label: "Recursos", href: "#" },
+  { label: "Módulos", href: "/modulos" },
+  { label: "Como funciona", href: "#jornada" },
+  { label: "Segurança", href: "#seguranca" },
 ];
 
 export function Nav() {
@@ -27,13 +26,13 @@ export function Nav() {
         </div>
         <div className="ml-auto flex items-center gap-3">
           <Link
-            href="#"
+            href="/dashboard"
             className="hidden text-sm text-text-2 transition-colors hover:text-text-1 sm:inline"
           >
             Entrar
           </Link>
           <Button asChild size="sm">
-            <Link href="/dashboard">Começar</Link>
+            <Link href="/modulos">Ver os módulos</Link>
           </Button>
         </div>
       </nav>

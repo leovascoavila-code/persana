@@ -2,9 +2,9 @@ import { Logo } from "./logo";
 import { StatTile } from "@/components/ui/stat-tile";
 import { RevenueCard } from "@/components/app/revenue-card";
 
-const TABS = ["Visão geral", "Clientes", "Relatórios"];
+const TABS = ["Visão geral", "Pacientes", "Protocolos"];
 
-/** Preview do app (mundo Tinta) dentro do hero de marketing. */
+/** Preview ilustrativo do app (mundo Tinta) dentro do hero de marketing. */
 export function AppPreview() {
   return (
     <div className="mx-auto mt-14 max-w-[1000px] overflow-hidden rounded-t-lg border border-border-strong bg-bg-1 shadow-[var(--shadow-2)]">
@@ -27,12 +27,12 @@ export function AppPreview() {
         </nav>
       </div>
 
-      {/* corpo */}
+      {/* corpo — números ilustrativos */}
       <div className="px-5 py-[22px]">
         <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <StatTile label="Receita recorrente" value="R$ 84,2 mil" delta="12,4% vs. mês anterior" />
-          <StatTile label="Clientes ativos" value="1.284" delta="3,1% vs. mês anterior" />
-          <StatTile label="Satisfação" value="96%" delta="1,2 p.p. vs. mês anterior" />
+          <StatTile label="Pacientes ativos" value="1.284" delta="3,1% vs. mês anterior" />
+          <StatTile label="Protocolos em curso" value="342" delta="8 novos esta semana" />
+          <StatTile label="Exames analisados" value="96%" delta="recall da extração por IA" trend="flat" />
         </div>
 
         <RevenueCard />
