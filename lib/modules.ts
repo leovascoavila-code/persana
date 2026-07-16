@@ -48,6 +48,7 @@ export const GRUPOS = [
   "Motor terapêutico",
   "Prescrição & farmácia",
   "Plataforma",
+  "CRM (design 07/2026)",
   "Planejados (spec v3)",
 ] as const;
 
@@ -397,6 +398,75 @@ export const MODULES: PersanaModule[] = [
       "Adaptadores incrementais (protocolos_modelo, medicines 15.800, curso injetáveis)",
       "Curadoria de slugs duplicados (dedup por fingerprint + supersedes)",
     ],
+    frontPersana: "nenhum",
+  },
+
+  // ─────────────────────────── CRM (design 07/2026) ───────────────────────────
+  {
+    slug: "briefing",
+    nome: "Briefing pré-consulta",
+    grupo: "CRM (design 07/2026)",
+    resumo:
+      "CRM-0: o contexto do paciente em 1 chamada — rapport, última consulta assinada, delta de exames desde ela, protocolos/dietas em curso.",
+    status: "pronto",
+    backend: "modules/briefing.py",
+    entregue: [
+      "GET /pacientes/{pid}/briefing (role médico) — composição read-only",
+      "Delta desde a última consulta assinada: exames novos, analitos alterados, pendências de confirmação",
+      "Rapport aprovado (Memory Engine) + red flags abertas + protocolos/dietas em curso",
+      "Seções futuras declaradas no contrato (adesão/oportunidades); próxima consulta já ligada à agenda (022)",
+      "Evento briefing.visualizado (audit) — métrica de adoção instrumentada (S.15)",
+      "Tela Tinta /briefing no Persana (contrato tipado em lib/briefing.ts + mock)",
+    ],
+    faltas: [
+      "Deploy no VPS (sobe no próximo pacote de deploy)",
+      "Ligar a tela ao endpoint real (auth + fetch) — hoje renderiza o mock do contrato",
+    ],
+    frontPersana: "parcial",
+  },
+  {
+    slug: "agenda",
+    nome: "Agenda & ocupação",
+    grupo: "CRM (design 07/2026)",
+    resumo:
+      "CRM-1: agenda médico+paciente com salas/equipamentos como recurso de 1ª classe + máquina de estados + dashboard de ocupação.",
+    status: "pronto",
+    backend: "modules/agenda.py",
+    entregue: [
+      "Migration 022: clinic_resources + physician_schedules + appointments (RLS FORCE)",
+      "Máquina de estados marcado → confirmado → realizado | faltou | cancelado | remarcado (CHECK no banco + lógica pura)",
+      "Conflito de janela por médico e por sala/equipamento (409); slots vizinhos não colidem",
+      "Remarcação cria appointment novo linkado (remarcado_para); bloqueio de agenda sem paciente",
+      "Ocupação: read-model por médico e por recurso (horas ocupadas, faltas, cancelamentos)",
+      "Briefing ligado: proxima_consulta agora é viva no GET /briefing",
+      "Eventos audit appointment.* (comparecimento alimenta metas CRM-5)",
+    ],
+    faltas: [
+      "Deploy no VPS (pacote 020+021+022 — VPS está em 019)",
+      "UI Persana (agenda visual + heatmap de ocupação)",
+    ],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "adesao",
+    nome: "Adesão & real × esperado",
+    grupo: "CRM (design 07/2026)",
+    resumo:
+      "CRM-3: planos de adesão com metas snapshotadas + check-ins + comparação do resultado real (exames/bioimpedância/PROMs) × esperado.",
+    status: "planejado",
+    entregue: [],
+    faltas: ["Todo o módulo (migration 023) — ver DESIGN_CRM_PERSANA.md §3.4 e §6.5"],
+    frontPersana: "nenhum",
+  },
+  {
+    slug: "relacionamento",
+    nome: "Relacionamento (CRM core)",
+    grupo: "CRM (design 07/2026)",
+    resumo:
+      "CRM-4: ciclo de vida do paciente, timeline unificada (read-model sobre audit/N2) e tarefas de follow-up. Care-gap engine na sequência.",
+    status: "planejado",
+    entregue: [],
+    faltas: ["Todo o módulo — ver DESIGN_CRM_PERSANA.md §3.2 e §6.2"],
     frontPersana: "nenhum",
   },
 
