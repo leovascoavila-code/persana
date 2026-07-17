@@ -143,7 +143,7 @@ export const MODULES: PersanaModule[] = [
     grupo: "Jornada clínica",
     resumo:
       "Página /consulta/{paciente}: embed MEMED tela cheia, login+MFA, captura de eventos de prescrição, CPF decifrado transiente.",
-    status: "pronto",
+    status: "live",
     backend: "modules/consulta.py",
     entregue: [
       "Embed MEMED tela cheia (featureToggle + forceSign ICP-Brasil)",
@@ -151,8 +151,8 @@ export const MODULES: PersanaModule[] = [
       "CPF cifrado em repouso; payload-set-paciente transiente",
     ],
     faltas: [
-      "Deploy F6 no VPS (sobe junto com migrations 018+019)",
       "Portar do React inline para o Persana (mundo Tinta)",
+      "Decidir alvo do /consulta sob o domínio (clinico.persana.com.br → VPS ou rewrite na Vercel)",
     ],
     pocPath: "/consulta",
     frontPersana: "nenhum",
@@ -251,8 +251,7 @@ export const MODULES: PersanaModule[] = [
       "N2 instrumentado (eventos de jornada)",
     ],
     faltas: [
-      "Biblioteca clinical_protocols VAZIA → /protocolo/sugerir retorna 409",
-      "Curadoria humana dos ~25 candidatos (BIBLIOTECA_PROTOCOLOS_candidatos.md) → seed",
+      "25 candidatos SEMEADOS (020 live 17/07) aguardando aprovação médica — /protocolo/sugerir segue 409 até ≥1 aprovado via /protocolos/{slug}/aprovar",
       "UI de protocolos no Persana",
     ],
     frontPersana: "nenhum",
@@ -320,17 +319,16 @@ export const MODULES: PersanaModule[] = [
     grupo: "Prescrição & farmácia",
     resumo:
       "Integração MEMED completa: prescritores espelho, verificação server-side anti-forjadura, reconciliação, assinatura ICP-Brasil.",
-    status: "pronto",
+    status: "live",
     backend: "modules/memed.py",
     entregue: [
       "F1–F5 completas: client, migrations 018, captura verificada, ponte farmácia",
       "Payload real capturado em homolog + schema congelado (8 golden tests)",
       "Suite 258 passed — único ponto que flipa status='assinada' é verificação na API",
+      "F6 deployado 08/07: 018+019 live, 9 rotas /memed/* + RLS runtime provado",
     ],
     faltas: [
-      "F6: deploy VPS (018+019, PATIENT_CPF_KEY, DNS persana.com.br + Caddy)",
-      "Leo: assinar Termo de Adesão (contato@minaspharma.com.br) + pedir DPA",
-      "Usuário avaliacao.memed + paciente demo → submeter form parceiro",
+      "Usuário avaliacao.memed + paciente demo + vídeo do fluxo → completar e ENVIAR o form parceiro",
     ],
     frontPersana: "nenhum",
   },
@@ -408,7 +406,7 @@ export const MODULES: PersanaModule[] = [
     grupo: "CRM (design 07/2026)",
     resumo:
       "CRM-0: o contexto do paciente em 1 chamada — rapport, última consulta assinada, delta de exames desde ela, protocolos/dietas em curso.",
-    status: "pronto",
+    status: "live",
     backend: "modules/briefing.py",
     entregue: [
       "GET /pacientes/{pid}/briefing (role médico) — composição read-only",
@@ -419,7 +417,6 @@ export const MODULES: PersanaModule[] = [
       "Tela Tinta /briefing no Persana (contrato tipado em lib/briefing.ts + mock)",
     ],
     faltas: [
-      "Deploy no VPS (sobe no próximo pacote de deploy)",
       "Ligar a tela ao endpoint real (auth + fetch) — hoje renderiza o mock do contrato",
     ],
     frontPersana: "parcial",
@@ -430,7 +427,7 @@ export const MODULES: PersanaModule[] = [
     grupo: "CRM (design 07/2026)",
     resumo:
       "CRM-1: agenda médico+paciente com salas/equipamentos como recurso de 1ª classe + máquina de estados + dashboard de ocupação.",
-    status: "pronto",
+    status: "live",
     backend: "modules/agenda.py",
     entregue: [
       "Migration 022: clinic_resources + physician_schedules + appointments (RLS FORCE)",
@@ -441,10 +438,7 @@ export const MODULES: PersanaModule[] = [
       "Briefing ligado: proxima_consulta agora é viva no GET /briefing",
       "Eventos audit appointment.* (comparecimento alimenta metas CRM-5)",
     ],
-    faltas: [
-      "Deploy no VPS (pacote 020+021+022 — VPS está em 019)",
-      "UI Persana (agenda visual + heatmap de ocupação)",
-    ],
+    faltas: ["UI Persana (agenda visual + heatmap de ocupação)"],
     frontPersana: "nenhum",
   },
   {
