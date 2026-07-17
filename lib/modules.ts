@@ -360,9 +360,15 @@ export const MODULES: PersanaModule[] = [
     resumo: "OAuth2/JWT + MFA TOTP + 6 perfis. App conecta NOSUPERUSER; tenant por transação.",
     status: "live",
     backend: "modules/auth.py",
-    entregue: ["Login JWT + MFA", "RBAC 6 perfis provado (403 em rota clínica)"],
-    faltas: ["Tela de login no Persana (hoje inline nos POCs)"],
-    frontPersana: "nenhum",
+    entregue: [
+      "Login JWT + MFA",
+      "RBAC 6 perfis provado (403 em rota clínica)",
+      "Tela /login Tinta no Persana (clínica+email+senha+TOTP; token só em memória)",
+    ],
+    faltas: [
+      "Sessão persistente (refresh token) — reload encerra a sessão por design do POC",
+    ],
+    frontPersana: "parcial",
   },
   {
     slug: "console-medico",
@@ -415,9 +421,10 @@ export const MODULES: PersanaModule[] = [
       "Seções futuras declaradas no contrato (adesão/oportunidades); próxima consulta já ligada à agenda (022)",
       "Evento briefing.visualizado (audit) — métrica de adoção instrumentada (S.15)",
       "Tela Tinta /briefing no Persana (contrato tipado em lib/briefing.ts + mock)",
+      "Ligada ao endpoint real quando logado (proxy /api/poc + seletor de paciente; deslogado = mock)",
     ],
     faltas: [
-      "Ligar a tela ao endpoint real (auth + fetch) — hoje renderiza o mock do contrato",
+      "Smoke e2e com credenciais demo (criar usuário médico de avaliação no POC)",
     ],
     frontPersana: "parcial",
   },
@@ -438,10 +445,11 @@ export const MODULES: PersanaModule[] = [
       "Briefing ligado: proxima_consulta agora é viva no GET /briefing",
       "Eventos audit appointment.* (comparecimento alimenta metas CRM-5)",
       "Tela Tinta /agenda (timeline do dia + heatmap de ocupação por recurso + semana por médico)",
+      "Ligada ao endpoint real quando logado (dia + ocupação + recursos via proxy /api/poc)",
     ],
     faltas: [
-      "Ligar a UI ao endpoint real (auth + fetch) — hoje renderiza mock do contrato",
       "Marcação/remarcação interativa na tela (escrita já existe via API)",
+      "Smoke e2e com credenciais demo (criar usuário médico de avaliação no POC)",
     ],
     frontPersana: "parcial",
   },

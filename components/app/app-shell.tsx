@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/marketing/logo";
+import { SessionChip } from "@/components/app/auth";
 
 const TABS = [
   { key: "dashboard", label: "Visão geral", href: "/dashboard" },
@@ -42,6 +43,7 @@ export function AppShell({
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-3">
+            <SessionChip />
             <span className="hidden text-[13px] text-text-3 sm:inline">
               Minas Pharma
             </span>
