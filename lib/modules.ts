@@ -437,9 +437,13 @@ export const MODULES: PersanaModule[] = [
       "Ocupação: read-model por médico e por recurso (horas ocupadas, faltas, cancelamentos)",
       "Briefing ligado: proxima_consulta agora é viva no GET /briefing",
       "Eventos audit appointment.* (comparecimento alimenta metas CRM-5)",
+      "Tela Tinta /agenda (timeline do dia + heatmap de ocupação por recurso + semana por médico)",
     ],
-    faltas: ["UI Persana (agenda visual + heatmap de ocupação)"],
-    frontPersana: "nenhum",
+    faltas: [
+      "Ligar a UI ao endpoint real (auth + fetch) — hoje renderiza mock do contrato",
+      "Marcação/remarcação interativa na tela (escrita já existe via API)",
+    ],
+    frontPersana: "parcial",
   },
   {
     slug: "adesao",

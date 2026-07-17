@@ -3,6 +3,7 @@ import { Logo } from "@/components/marketing/logo";
 
 const TABS = [
   { key: "dashboard", label: "Visão geral", href: "/dashboard" },
+  { key: "agenda", label: "Agenda", href: "/agenda" },
   { key: "briefing", label: "Briefing", href: "/briefing" },
   { key: "modulos", label: "Módulos", href: "/modulos" },
 ] as const;
