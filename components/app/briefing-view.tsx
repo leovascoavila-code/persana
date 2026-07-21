@@ -11,6 +11,7 @@ import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatTile } from "@/components/ui/stat-tile";
 import { Table, THead, TR, TH, TD } from "@/components/ui/table";
 import { useAuth } from "@/components/app/auth";
+import { BriefingInstrumento } from "@/components/app/instrumento-briefing";
 import { api } from "@/lib/api";
 import {
   MOCK_BRIEFING,
@@ -425,6 +426,8 @@ export function BriefingView() {
               ))}
             </CardBody>
           </Card>
+
+          <BriefingInstrumento pid={pid} authed={authed} />
 
           {/* seções futuras — o payload já as declara com motivo */}
           <Card>

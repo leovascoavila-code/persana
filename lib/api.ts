@@ -11,6 +11,14 @@ import type {
   OcupacaoMedico,
   RecursoClinica,
 } from "@/lib/agenda";
+import type {
+  EntitlementMe,
+  ScanDetail,
+  ScanResumo,
+  SeriePonto,
+} from "@/lib/instrumento";
+import type { InstrumentoPendente, WorkspaceToday } from "@/lib/workspace";
+import type { FichaPaciente } from "@/lib/ficha";
 
 const BASE = "/api/poc";
 
@@ -93,7 +101,11 @@ export interface OcupacaoOut {
 }
 
 export const api = {
-  patients: () => req<{ id: string; nome: string }[]>("/patients"),
+  patients: (q?: string) =>
+    req<{ id: string; nome: string }[]>(
+      q ? `/patients?q=${encodeURIComponent(q)}` : "/patients"
+    ),
+  ficha: (pid: string) => req<FichaPaciente>(`/patients/${pid}/ficha`),
   briefing: (pid: string) => req<BriefingPayload>(`/pacientes/${pid}/briefing`),
   agendaDia: (data: string, medicoId?: string) =>
     req<AgendaDiaOut>(
@@ -102,4 +114,20 @@ export const api = {
   ocupacao: (de: string, ate: string) =>
     req<OcupacaoOut>(`/agenda/ocupacao?de=${de}&ate=${ate}`),
   recursos: () => req<RecursoClinica[]>("/agenda/recursos"),
+  entitlementMe: () => req<EntitlementMe>("/instrumento/entitlement/me"),
+  instrumentoScans: (pid: string) =>
+    req<ScanResumo[]>(`/instrumento/paciente/${pid}/scans`),
+  instrumentoScan: (scanId: string) =>
+    req<ScanDetail>(`/instrumento/scans/${scanId}`),
+  instrumentoSerie: (pid: string, item: string) =>
+    req<SeriePonto[]>(
+      `/instrumento/paciente/${pid}/serie?item=${encodeURIComponent(item)}`
+    ),
+  workspaceToday: () => req<WorkspaceToday>("/workspace/today"),
+  workspaceItemAcao: (id: string, acao: "done" | "dismiss" | "snooze", dias?: number) =>
+    req<{ id: string; status: string }>(`/workspace/items/${id}/${acao}`, {
+      method: "POST",
+      body: acao === "snooze" ? JSON.stringify({ dias: dias ?? 1 }) : undefined,
+    }),
+  instrumentoPendentes: () => req<InstrumentoPendente[]>("/instrumento/pendentes"),
 };

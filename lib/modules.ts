@@ -407,6 +407,51 @@ export const MODULES: PersanaModule[] = [
 
   // ─────────────────────────── CRM (design 07/2026) ───────────────────────────
   {
+    slug: "instrumento",
+    nome: "Análise instrumental (BIO)",
+    grupo: "CRM (design 07/2026)",
+    resumo:
+      "Laudos de instrumento (bioressonância QRMA, body-scan) como dado longitudinal — módulo DESACOPLADO de exames, ativado por profissional. Leitura não-diagnóstica, intra-paciente.",
+    status: "live",
+    backend: "modules/instrumento.py + core/features.py",
+    entregue: [
+      "Migration 023: instrument_scans + instrument_readings + tenant_features + professional_features (RLS FORCE)",
+      "Entitlement por profissional (require_feature): a clínica assina + o admin liga por pessoa; sem ele, 403",
+      "Ingestão de laudo (POST /scans): parser determinístico QRMA-PDF / body-scan-XLSX → rascunho pendente + SAVEPOINT por item",
+      "Revisão médica (pendente → confirmado) + série histórica intra-paciente (GET /paciente/{pid}/serie)",
+      "Desacoplado: zero JOIN com lab_* — não alimenta care-gap/sugestão/briefing-de-analitos (CFM)",
+      "Tela Tinta /instrumento (BIO-2): viewer da análise individual + heatmap de grau + rótulo não-diagnóstico",
+      "Série histórica no front (BIO-3): sparkline do marcador ao longo das sessões + faixa de referência + delta",
+    ],
+    faltas: [
+      "Comparador de 2 sessões lado a lado + seção no briefing (§8)",
+      "UI de ingestão (upload) e de concessão de entitlement (hoje via API)",
+      "Bioimpedância por device/API (BIO-4)",
+    ],
+    frontPersana: "parcial",
+  },
+  {
+    slug: "workspace",
+    nome: "Workspace Hoje (inbox clínico)",
+    grupo: "CRM (design 07/2026)",
+    resumo:
+      "Onda 1 do plano Sakana: agenda do dia + fila única de pendências (work_items, decisão D-6) em 1 chamada — exames a confirmar, documentos em rascunho, red flags, pacientes sem retorno.",
+    status: "pronto",
+    backend: "modules/workspace.py",
+    entregue: [
+      "Migration 026 work_items (fila única clinical/crm/financeiro, RLS FORCE, UNIQUE anti-duplicação)",
+      "Projeção on-demand de 4 fontes + sweep de auto-resolução (item resolvido nunca reabre)",
+      "GET /workspace/today (BFF: agenda + inbox em 1 resposta) + transições guarded done/snooze/dismiss (409 em corrida)",
+      "Quarentena preservada: instrumental fica FORA de work_items (bloco separado via GET /instrumento/pendentes)",
+      "Tela Tinta /hoje no Persana (contrato lib/workspace.ts + mock; ações reais quando logado)",
+    ],
+    faltas: [
+      "Deploy da 025+026 no VPS (pacote gated)",
+      "Badges de contagem no app shell (/app/navigation)",
+    ],
+    frontPersana: "parcial",
+  },
+  {
     slug: "briefing",
     nome: "Briefing pré-consulta",
     grupo: "CRM (design 07/2026)",
