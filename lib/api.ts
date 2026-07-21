@@ -19,6 +19,7 @@ import type {
 } from "@/lib/instrumento";
 import type { InstrumentoPendente, WorkspaceToday } from "@/lib/workspace";
 import type { FichaPaciente } from "@/lib/ficha";
+import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 
 const BASE = "/api/poc";
 
@@ -130,4 +131,18 @@ export const api = {
       body: acao === "snooze" ? JSON.stringify({ dias: dias ?? 1 }) : undefined,
     }),
   instrumentoPendentes: () => req<InstrumentoPendente[]>("/instrumento/pendentes"),
+  // ── Biblioteca clínica (curadoria de merge, Onda 2) ──
+  bibliotecaFila: () => req<FilaCluster[]>("/biblioteca/fila"),
+  bibliotecaProposta: (id: string) =>
+    req<PropostaDetalhe>(`/biblioteca/propostas/${id}`),
+  bibliotecaAceitar: (id: string) =>
+    req<{ id: string; status: string; golden_item_id: string | null }>(
+      `/biblioteca/propostas/${id}/aceitar`,
+      { method: "POST" }
+    ),
+  bibliotecaRejeitar: (id: string, motivo?: string) =>
+    req<{ id: string; status: string }>(
+      `/biblioteca/propostas/${id}/rejeitar`,
+      { method: "POST", body: JSON.stringify({ motivo: motivo ?? null }) }
+    ),
 };

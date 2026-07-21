@@ -405,6 +405,28 @@ export const MODULES: PersanaModule[] = [
     frontPersana: "nenhum",
   },
 
+  {
+    slug: "biblioteca",
+    nome: "Biblioteca clínica (curadoria de merge)",
+    grupo: "Plataforma",
+    resumo:
+      "Onda 2 do plano Sakana: fila de dedup do Content Registry (10.9k+ clusters) com aceite HUMANO do registro canônico. O pipeline propõe; o médico funde (doutrina 021, anti-colapso automático).",
+    status: "live",
+    backend: "modules/curadoria.py · migration 027 · scripts/curadoria_batch.py",
+    entregue: [
+      "Migration 027 (deploy 21/07): content_merge_proposals + protocol_formula_links (globais) + content_item.merged_into_id; UNIQUE parcial impede 2 propostas abertas por cluster",
+      "Batch determinístico (assinatura de composição idêntica → proposta 'identical' 1-clique) + fase --llm opcional (JSON rígido, teto 50 clusters)",
+      "GET /biblioteca/fila + /propostas/{id} (diff golden × membros) + aceite/rejeição humanos (CHECK aceite_exige_humano); preço nunca gravado aqui (motor 5012 é fonte única)",
+      "Tela Tinta /biblioteca no Persana (contrato lib/biblioteca.ts + mock; ações reais quando logado)",
+    ],
+    faltas: [
+      "Fase determinística resolve 0/3500 na fila atual (dominada por variantes, não duplicatas exatas) — trabalho real é a fase --llm + curadoria médica",
+      "protocol_formula_links sem UI (link protocolo→fórmula via API)",
+      "Curadoria humana do 1º lote (meta: 50 protocolos + 100 fórmulas aprovados para tirar /protocolo/sugerir do 409)",
+    ],
+    frontPersana: "parcial",
+  },
+
   // ─────────────────────────── CRM (design 07/2026) ───────────────────────────
   {
     slug: "instrumento",
