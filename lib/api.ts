@@ -26,6 +26,11 @@ import type {
   Programa,
   ProgramaDetalhe,
 } from "@/lib/planos";
+import type {
+  Invoice,
+  InvoiceDetalhe,
+  ProviderConfig,
+} from "@/lib/billing";
 
 const BASE = "/api/poc";
 
@@ -206,4 +211,34 @@ export const api = {
       { method: "POST", body: JSON.stringify({ motivo: motivo ?? null }) }
     ),
   matricula: (eid: string) => req<Matricula>(`/comercial/matriculas/${eid}`),
+  // ── Billing (Onda 3: /billing) ──
+  providerConfigs: () => req<ProviderConfig[]>("/billing/provider-configs"),
+  criarProviderConfig: (body: {
+    kind: string;
+    provider: string;
+    display_nome?: string | null;
+    credenciais?: Record<string, string>;
+    cert_ref?: string | null;
+    is_default?: boolean;
+    sandbox?: boolean;
+  }) =>
+    req<{ id: string }>("/billing/provider-configs", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  invoices: () => req<Invoice[]>("/billing/invoices"),
+  criarInvoice: (body: {
+    valor_centavos: number;
+    enrollment_id?: string | null;
+    subscription_id?: string | null;
+    offer_id?: string | null;
+    descricao?: string | null;
+    cpf_cnpj?: string | null;
+    nome?: string | null;
+  }) =>
+    req<{ id: string; status: string; provider_ref: string; pix_copia_cola: string; pix_qr_b64: string | null }>(
+      "/billing/invoices",
+      { method: "POST", body: JSON.stringify(body) }
+    ),
+  invoice: (iid: string) => req<InvoiceDetalhe>(`/billing/invoices/${iid}`),
 };

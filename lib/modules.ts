@@ -578,13 +578,14 @@ export const MODULES: PersanaModule[] = [
       "Migration 029 (deploy 21/07): 4 tabelas billing_* RLS FORCE (provider_configs [credenciais cifradas Fernet], subscriptions, invoices, events)",
       "Lib PixProvider/CardProvider + SicoobPix portado do racional MP (OAuth2 mTLS→cob→QR), credenciais por tenant + registry config-driven",
       "Webhook verifica com o provider antes de marcar pago → avança ciclo da matrícula; inerte por default (422 sem provider/chave)",
+      "GET /billing/invoices (lista) + tela Tinta /cobranca no Persana: config de provedor (financeiro) + fatura/QR Pix + copia-e-cola",
     ],
     faltas: [
       "Setar BILLING_SECRET_KEY no VPS + cada clínica configurar cert/cred Sicoob → Pix LIVE E2E",
       "Cartão (adapter Rede + orquestrador Pagar.me/Malga) = Slice 2b",
-      "UI de billing no Persana (config de provider, fatura/QR no portal)",
+      "Pagamento no portal do paciente (Slice 2c)",
     ],
-    frontPersana: "nenhum",
+    frontPersana: "parcial",
   },
 
   // ─────────────────────────── Planejados (spec v3) ───────────────────────────
