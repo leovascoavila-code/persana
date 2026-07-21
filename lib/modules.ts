@@ -534,14 +534,24 @@ export const MODULES: PersanaModule[] = [
   },
   {
     slug: "relacionamento",
-    nome: "Relacionamento (CRM core)",
+    nome: "Relacionamento (CRM por eventos)",
     grupo: "CRM (design 07/2026)",
     resumo:
-      "CRM-4: ciclo de vida do paciente, timeline unificada (read-model sobre audit/N2) e tarefas de follow-up. Care-gap engine na sequência.",
-    status: "planejado",
-    entregue: [],
-    faltas: ["Todo o módulo — ver DESIGN_CRM_PERSANA.md §3.2 e §6.2"],
-    frontPersana: "nenhum",
+      "Onda 4 Slice 1: ciclo de vida do paciente + score de risco por regras EXPLICÁVEIS (sem ML) sobre a espinha única (audit_log/work_items). Risco alto vira tarefa na fila (D-6). Cadências WhatsApp/PROMs nas fatias seguintes.",
+    status: "parcial",
+    backend: "modules/crm.py · migration 030",
+    entregue: [
+      "Migration 030 (deploy 21/07): crm_contacts, crm_patient_state (PK tenant+patient, lifecycle 10 estágios), crm_segments, patient_channel_consents (canal×finalidade) — RLS FORCE",
+      "avaliar-risco: regras legíveis (sem consulta 60d / plano ativo sem retorno / receita vencida / sem consentimento) → risco ALTO gera work_item domain='crm' com dono+prazo (D-6), não reabre resolvido",
+      "Consentimento canal×finalidade = gate regulatório de cadência; segmentos por regra JSON; contatos (lead)",
+      "Tela Tinta /crm no Persana: funil por estágio + fila de risco (motivo × próxima ação) + reavaliar",
+    ],
+    faltas: [
+      "Cadências (WhatsApp deep-link) — exige /preflight whatsapp + reuso infra WA da MP por tenant",
+      "PROMs/check-in (estender questionarios) + adesão real×esperado (estender adesao_events 024)",
+      "Timeline unificada + care-gap engine (§6.2, pós-curadoria da biblioteca)",
+    ],
+    frontPersana: "parcial",
   },
 
   // ─────────────────────────── Comercial (Onda 3) ───────────────────────────

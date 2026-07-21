@@ -31,6 +31,7 @@ import type {
   InvoiceDetalhe,
   ProviderConfig,
 } from "@/lib/billing";
+import type { Pipeline, RiscoPaciente } from "@/lib/crm";
 
 const BASE = "/api/poc";
 
@@ -241,4 +242,11 @@ export const api = {
       { method: "POST", body: JSON.stringify(body) }
     ),
   invoice: (iid: string) => req<InvoiceDetalhe>(`/billing/invoices/${iid}`),
+  // ── CRM (Onda 4: /crm) ──
+  crmPipeline: () => req<Pipeline>("/crm/pipeline"),
+  crmAvaliarRisco: (pid: string) =>
+    req<RiscoPaciente & { work_item_id: string | null }>(
+      `/crm/pacientes/${pid}/avaliar-risco`,
+      { method: "POST" }
+    ),
 };
