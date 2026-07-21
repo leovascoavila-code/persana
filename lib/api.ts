@@ -20,6 +20,12 @@ import type {
 import type { InstrumentoPendente, WorkspaceToday } from "@/lib/workspace";
 import type { FichaPaciente } from "@/lib/ficha";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
+import type {
+  Matricula,
+  Oferta,
+  Programa,
+  ProgramaDetalhe,
+} from "@/lib/planos";
 
 const BASE = "/api/poc";
 
@@ -145,4 +151,59 @@ export const api = {
       `/biblioteca/propostas/${id}/rejeitar`,
       { method: "POST", body: JSON.stringify({ motivo: motivo ?? null }) }
     ),
+  // ── Planos comerciais (Onda 3: /comercial) ──
+  programas: () => req<Programa[]>("/comercial/programas"),
+  programa: (tid: string) => req<ProgramaDetalhe>(`/comercial/programas/${tid}`),
+  criarPrograma: (body: {
+    nome: string;
+    descricao?: string | null;
+    duracao_dias?: number | null;
+    cadencia_checkin_dias?: number | null;
+    inclusoes?: string[];
+    exclusoes?: string[];
+    termos?: string | null;
+  }) =>
+    req<{ id: string }>("/comercial/programas", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  ativarPrograma: (tid: string) =>
+    req<{ id: string; status: string }>(`/comercial/programas/${tid}/ativar`, {
+      method: "POST",
+    }),
+  criarPreco: (
+    tid: string,
+    body: {
+      modalidade: string;
+      valor_centavos: number;
+      moeda?: string;
+      parcelas?: number | null;
+      periodicidade?: string | null;
+    }
+  ) =>
+    req<{ id: string }>(`/comercial/programas/${tid}/precos`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  ofertasPaciente: (pid: string) =>
+    req<Oferta[]>(`/comercial/pacientes/${pid}/ofertas`),
+  criarOferta: (
+    pid: string,
+    body: { template_id: string; price_id?: string | null; metas?: string[] }
+  ) =>
+    req<{ id: string; terms_hash: string }>(
+      `/comercial/pacientes/${pid}/ofertas`,
+      { method: "POST", body: JSON.stringify(body) }
+    ),
+  aceitarOferta: (oid: string) =>
+    req<{ offer_id: string; status: string; enrollment_id: string }>(
+      `/comercial/ofertas/${oid}/aceitar`,
+      { method: "POST" }
+    ),
+  recusarOferta: (oid: string, motivo?: string) =>
+    req<{ offer_id: string; status: string }>(
+      `/comercial/ofertas/${oid}/recusar`,
+      { method: "POST", body: JSON.stringify({ motivo: motivo ?? null }) }
+    ),
+  matricula: (eid: string) => req<Matricula>(`/comercial/matriculas/${eid}`),
 };

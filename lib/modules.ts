@@ -49,6 +49,7 @@ export const GRUPOS = [
   "Prescrição & farmácia",
   "Plataforma",
   "CRM (design 07/2026)",
+  "Comercial (Onda 3)",
   "Planejados (spec v3)",
 ] as const;
 
@@ -540,6 +541,49 @@ export const MODULES: PersanaModule[] = [
     status: "planejado",
     entregue: [],
     faltas: ["Todo o módulo — ver DESIGN_CRM_PERSANA.md §3.2 e §6.2"],
+    frontPersana: "nenhum",
+  },
+
+  // ─────────────────────────── Comercial (Onda 3) ───────────────────────────
+  {
+    slug: "comercial",
+    nome: "Programas & Ofertas",
+    grupo: "Comercial (Onda 3)",
+    resumo:
+      "Onda 3 Slice 1: plano COMERCIAL (serviço do consultório) separado do clínico. Programa vende serviço; fórmula/exame/medicamento ficam FORA (separação regulatória). Oferta com snapshot imutável + aceite guarded cria matrícula.",
+    status: "live",
+    backend: "modules/comercial.py · migration 028",
+    entregue: [
+      "Migration 028 (deploy 21/07): 6 tabelas care_* RLS FORCE (templates/prices/offers/enrollments/service_items/clinical_links)",
+      "RBAC D-5: care_coordinator, assistente_clinico, financeiro_clinica",
+      "Ciclo do programa draft→ativo→retirado; oferta com snapshot imutável + terms_hash + accepted_evidence; aceite guarded (409) cria matrícula",
+      "care_plan_clinical_links = M:N aponta pro clínico (treatment_plans intacto)",
+      "Tela Tinta /planos no Persana (Program/Offer Builder + timeline da oferta)",
+    ],
+    faltas: [
+      "Aceite/pagamento pelo PACIENTE (portal) — hoje o aceite é da equipe (Slice 2c)",
+      "Care Plan Timeline completa (adesão, PROMs, renovação)",
+    ],
+    frontPersana: "parcial",
+  },
+  {
+    slug: "billing",
+    nome: "Billing multi-provider (Pix)",
+    grupo: "Comercial (Onda 3)",
+    resumo:
+      "Onda 3 Slice 2a: cobrança do programa desacoplada do provedor. Cada clínica configura o próprio recebedor (Pix padrão BACEN, N bancos; cartão na 2b). Dinheiro/NF na entidade da clínica, nunca a farmácia (CFM).",
+    status: "live",
+    backend: "modules/billing.py · platform/billing · migration 029",
+    entregue: [
+      "Migration 029 (deploy 21/07): 4 tabelas billing_* RLS FORCE (provider_configs [credenciais cifradas Fernet], subscriptions, invoices, events)",
+      "Lib PixProvider/CardProvider + SicoobPix portado do racional MP (OAuth2 mTLS→cob→QR), credenciais por tenant + registry config-driven",
+      "Webhook verifica com o provider antes de marcar pago → avança ciclo da matrícula; inerte por default (422 sem provider/chave)",
+    ],
+    faltas: [
+      "Setar BILLING_SECRET_KEY no VPS + cada clínica configurar cert/cred Sicoob → Pix LIVE E2E",
+      "Cartão (adapter Rede + orquestrador Pagar.me/Malga) = Slice 2b",
+      "UI de billing no Persana (config de provider, fatura/QR no portal)",
+    ],
     frontPersana: "nenhum",
   },
 
