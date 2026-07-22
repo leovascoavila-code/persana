@@ -21,6 +21,7 @@ import type { InstrumentoPendente, WorkspaceToday } from "@/lib/workspace";
 import type { FichaPaciente } from "@/lib/ficha";
 import type { RoiDashboard, NorthStarMetric } from "@/lib/roi";
 import type { Regra, Cobertura } from "@/lib/automacao";
+import type { ExameDetalhe } from "@/lib/exames";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 import type {
   Matricula,
@@ -320,4 +321,10 @@ export const api = {
     }),
   automacaoTick: () => req<{ disparos: Record<string, number> }>("/automacoes/tick", { method: "POST" }),
   automacaoCobertura: (dias = 30) => req<Cobertura>(`/automacoes/cobertura?dias=${dias}`),
+  // ── Exames structured-first (Onda 6) ──
+  exames: (pid: string) =>
+    req<{ id: string; data_coleta: string | null; laboratorio: string | null; status: string; fonte: string }[]>(
+      `/exames/paciente/${pid}`
+    ),
+  exameDetalhe: (id: string) => req<ExameDetalhe>(`/exames/${id}`),
 };

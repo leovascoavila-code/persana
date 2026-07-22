@@ -5,6 +5,7 @@ import { SessionChip } from "@/components/app/auth";
 const TABS = [
   { key: "hoje", label: "Hoje", href: "/hoje" },
   { key: "pacientes", label: "Pacientes", href: "/pacientes" },
+  { key: "exames", label: "Exames", href: "/exames" },
   { key: "biblioteca", label: "Biblioteca", href: "/biblioteca" },
   { key: "planos", label: "Planos", href: "/planos" },
   { key: "cobranca", label: "Cobrança", href: "/cobranca" },
