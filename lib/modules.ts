@@ -615,16 +615,22 @@ export const MODULES: PersanaModule[] = [
   {
     slug: "dashboard-roi",
     nome: "Dashboard ROI do médico",
-    grupo: "Planejados (spec v3)",
+    grupo: "Jornada clínica",
+    backend: "modules/roi.py · platform/roi.py (leitura/agregação, sem migration)",
     resumo:
       "S.18: retorno do médico por protocolo/jornada (sem exibir receita da farmácia, sem comissão por prescrição).",
-    status: "planejado",
-    entregue: [],
-    faltas: [
-      "Todo o módulo — o dashboard atual do Persana é o esqueleto visual dele",
-      "North Star N1–N6 instrumentadas ponta a ponta (N2 já emite eventos)",
+    status: "live",
+    entregue: [
+      "North Star N1–N6 sobre o sinal já emitido (audit_log, billing_invoices, patient_protocols, adesao_events) — sem barramento/tabela nova",
+      "GET /roi/north-star + /roi/dashboard (RBAC: médico vê a si, admin vê a clínica)",
+      "Guarda S.16.3 (golden test): receita = billing_invoices (serviço próprio); nunca farmácia, nunca vínculo prescrição→ganho",
+      "Tela Tinta /dashboard (ROI): hero (horas/protocolos/honorários+crescimento/adesão) + strip North Star com alvo/progresso + nota da guarda",
     ],
-    frontPersana: "parcial",
+    faltas: [
+      "Valores reais dependem de uso (demo degrada gracioso a 0/—)",
+      "N1/N4/N5 são proxies declarados; refinam com dados de produção",
+    ],
+    frontPersana: "pronto",
   },
   {
     slug: "automacoes",

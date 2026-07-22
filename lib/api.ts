@@ -19,6 +19,7 @@ import type {
 } from "@/lib/instrumento";
 import type { InstrumentoPendente, WorkspaceToday } from "@/lib/workspace";
 import type { FichaPaciente } from "@/lib/ficha";
+import type { RoiDashboard, NorthStarMetric } from "@/lib/roi";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 import type {
   Matricula,
@@ -305,4 +306,8 @@ export const api = {
     }),
   copilotoFinalizar: (eid: string) =>
     req<{ pode_finalizar: boolean; avisos: string[] }>(`/copiloto/${eid}/finalizar`, { method: "POST" }),
+  // ── Dashboard ROI + North Star (S.15/S.18) ──
+  roiDashboard: () => req<RoiDashboard>("/roi/dashboard"),
+  roiNorthStar: () =>
+    req<{ medico_id: string | null; metricas: NorthStarMetric[] }>("/roi/north-star"),
 };

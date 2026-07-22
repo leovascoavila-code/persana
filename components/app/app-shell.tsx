@@ -12,7 +12,7 @@ const TABS = [
   { key: "cadencias", label: "Cadências", href: "/cadencias" },
   { key: "proms", label: "PROMs", href: "/proms" },
   { key: "consulta", label: "Consulta", href: "/consulta" },
-  { key: "dashboard", label: "Visão geral", href: "/dashboard" },
+  { key: "dashboard", label: "ROI", href: "/dashboard" },
   { key: "agenda", label: "Agenda", href: "/agenda" },
   { key: "briefing", label: "Briefing", href: "/briefing" },
   { key: "instrumento", label: "Instrumental", href: "/instrumento" },
