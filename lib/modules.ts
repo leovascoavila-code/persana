@@ -105,15 +105,20 @@ export const MODULES: PersanaModule[] = [
     resumo:
       "Encounter completo: gravação com consentimento, transcrição Whisper, extração SOAP/CID-10 por IA, assinatura do médico.",
     status: "live",
-    backend: "modules/atendimento.py",
+    backend: "modules/atendimento.py · modules/copiloto.py (Onda 5) · migration 034",
     entregue: [
       "Gate de consentimento de gravação (retenção 90d)",
       "STT real via Whisper (pt-BR) + rotulação médico/paciente",
       "Extração IA: queixas, CID-10 sugerido, follow-ups, SOAP de apoio",
       "Assinatura do médico → prontuário oficial versionado + hash",
+      "Onda 5 Copiloto (034): canvas de 8 seções (state machine empty→ai_draft→reviewed→signed), scribe (extração→seções ai_draft, sem LLM novo), cards SÓ da biblioteca aprovada, checklist de saída (regulatório bloqueia). IA nunca escreve oficial",
+      "Tela Tinta /consulta no Persana: canvas 2 colunas + painel Copiloto (cards) / Plano (checklist + finalizar)",
     ],
-    faltas: ["Diarização real (Deepgram)", "UI de atendimento no Persana"],
-    frontPersana: "nenhum",
+    faltas: [
+      "Diarização real (Deepgram); scribe LLM per-seção real = gate D-2 (região BR)",
+      "Cards reais dependem da curadoria da biblioteca (Onda 2); aba Briefing rica no painel",
+    ],
+    frontPersana: "parcial",
   },
   {
     slug: "prontuario",

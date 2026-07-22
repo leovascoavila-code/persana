@@ -40,6 +40,7 @@ import type {
   Pendente,
 } from "@/lib/cadencia";
 import type { Instrumento, PromResultado, Serie } from "@/lib/prom";
+import type { Encounter, Workspace } from "@/lib/consulta";
 
 const BASE = "/api/poc";
 
@@ -282,4 +283,26 @@ export const api = {
     req<PromResultado>("/prom/aplicar", { method: "POST", body: JSON.stringify(body) }),
   promSerie: (pid: string, instrumento: string) =>
     req<Serie>(`/prom/pacientes/${pid}/serie?instrumento=${encodeURIComponent(instrumento)}`),
+  // ── Consulta Copiloto (Onda 5: /atendimentos + /copiloto) ──
+  atendimentos: (pid: string) => req<Encounter[]>(`/atendimentos?patient_id=${pid}`),
+  criarAtendimento: (pid: string) =>
+    req<{ id: string }>("/atendimentos", { method: "POST", body: JSON.stringify({ patient_id: pid }) }),
+  copilotoInit: (eid: string) => req<{ encounter_id: string }>(`/copiloto/${eid}/init`, { method: "POST" }),
+  copilotoWorkspace: (eid: string) => req<Workspace>(`/copiloto/${eid}/workspace`),
+  copilotoScribe: (eid: string) =>
+    req<{ secoes_preenchidas: number }>(`/copiloto/${eid}/scribe`, { method: "POST" }),
+  copilotoSalvarSecao: (eid: string, secao: string, conteudo: string) =>
+    req<{ secao: string; status: string }>(`/copiloto/${eid}/secoes/${secao}`, {
+      method: "PUT",
+      body: JSON.stringify({ conteudo }),
+    }),
+  copilotoAssinarSecao: (eid: string, secao: string) =>
+    req<{ secao: string; status: string }>(`/copiloto/${eid}/secoes/${secao}/assinar`, { method: "POST" }),
+  copilotoChecklist: (eid: string, item: string, status: string) =>
+    req<{ item: string; status: string }>(`/copiloto/${eid}/checklist/${item}`, {
+      method: "PUT",
+      body: JSON.stringify({ status }),
+    }),
+  copilotoFinalizar: (eid: string) =>
+    req<{ pode_finalizar: boolean; avisos: string[] }>(`/copiloto/${eid}/finalizar`, { method: "POST" }),
 };
