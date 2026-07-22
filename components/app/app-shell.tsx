@@ -9,6 +9,7 @@ const TABS = [
   { key: "planos", label: "Planos", href: "/planos" },
   { key: "cobranca", label: "Cobrança", href: "/cobranca" },
   { key: "crm", label: "CRM", href: "/crm" },
+  { key: "cadencias", label: "Cadências", href: "/cadencias" },
   { key: "dashboard", label: "Visão geral", href: "/dashboard" },
   { key: "agenda", label: "Agenda", href: "/agenda" },
   { key: "briefing", label: "Briefing", href: "/briefing" },

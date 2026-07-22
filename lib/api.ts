@@ -32,6 +32,13 @@ import type {
   ProviderConfig,
 } from "@/lib/billing";
 import type { Pipeline, RiscoPaciente } from "@/lib/crm";
+import type {
+  Adesao,
+  CheckinResultado,
+  DispatchResultado,
+  MsgProvider,
+  Pendente,
+} from "@/lib/cadencia";
 
 const BASE = "/api/poc";
 
@@ -249,4 +256,23 @@ export const api = {
       `/crm/pacientes/${pid}/avaliar-risco`,
       { method: "POST" }
     ),
+  // ── Cadências (Onda 4: /cadencia) ──
+  cadenciaPendentes: () => req<Pendente[]>("/cadencia/pendentes"),
+  cadenciaDispatch: () =>
+    req<DispatchResultado>("/cadencia/dispatch", { method: "POST" }),
+  cadenciaProviderConfigs: () =>
+    req<MsgProvider[]>("/cadencia/provider-configs"),
+  cadenciaCheckin: (body: {
+    patient_id: string;
+    adesao: string;
+    delta?: string | null;
+    barreira?: string | null;
+    quer_contato?: boolean;
+  }) =>
+    req<CheckinResultado>("/cadencia/checkin", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  cadenciaAdesao: (pid: string) =>
+    req<Adesao>(`/cadencia/pacientes/${pid}/adesao`),
 };
