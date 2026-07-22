@@ -39,6 +39,7 @@ import type {
   MsgProvider,
   Pendente,
 } from "@/lib/cadencia";
+import type { Instrumento, PromResultado, Serie } from "@/lib/prom";
 
 const BASE = "/api/poc";
 
@@ -275,4 +276,10 @@ export const api = {
     }),
   cadenciaAdesao: (pid: string) =>
     req<Adesao>(`/cadencia/pacientes/${pid}/adesao`),
+  // ── PROMs (Onda 4: /prom) ──
+  promInstrumentos: () => req<Instrumento[]>("/prom/instrumentos"),
+  promAplicar: (body: { patient_id: string; instrumento: string; respostas: Record<string, number> }) =>
+    req<PromResultado>("/prom/aplicar", { method: "POST", body: JSON.stringify(body) }),
+  promSerie: (pid: string, instrumento: string) =>
+    req<Serie>(`/prom/pacientes/${pid}/serie?instrumento=${encodeURIComponent(instrumento)}`),
 };

@@ -200,15 +200,22 @@ export const MODULES: PersanaModule[] = [
   },
   {
     slug: "questionarios",
-    nome: "Questionários",
+    nome: "Questionários & PROMs",
     grupo: "Exames & dados",
     resumo:
-      "Respostas de questionários com foto + timestamp + hash sha256 (comprovação de autoria).",
+      "Respostas com foto + timestamp + hash sha256 (não-repúdio) + PROMs (desfecho relatado): instrumentos validados PHQ-9/GAD-7/AUDIT/SCOFF com scoring determinístico e tendência.",
     status: "live",
-    backend: "modules/questionarios.py",
-    entregue: ["Registro com não-repúdio", "Gate de consentimento foto_biometrica"],
-    faltas: ["UI de aplicação de questionários"],
-    frontPersana: "nenhum",
+    backend: "modules/questionarios.py · modules/prom.py · platform/instruments",
+    entregue: [
+      "Registro com não-repúdio + gate de consentimento foto_biometrica",
+      "PROMs (Onda 4): /prom aplica instrumento → score determinístico → threshold gera tarefa (work_item, D-6); PHQ-9 item 9 (ideação) = crítico urgent; série temporal + tendência (menor=melhor)",
+      "Tela Tinta /proms no Persana: aplicar instrumento + resultado + gráfico de tendência",
+    ],
+    faltas: [
+      "Texto por-item das perguntas na UI (hoje item N + escala; extrair de validated_instruments.perguntas)",
+      "Instrumentos licenciados (ISI/PSQI/Beck/EDE-Q) só após aquisição de licença",
+    ],
+    frontPersana: "parcial",
   },
   {
     slug: "memoria",
