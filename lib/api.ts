@@ -20,6 +20,7 @@ import type {
 import type { InstrumentoPendente, WorkspaceToday } from "@/lib/workspace";
 import type { FichaPaciente } from "@/lib/ficha";
 import type { RoiDashboard, NorthStarMetric } from "@/lib/roi";
+import type { Regra, Cobertura } from "@/lib/automacao";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 import type {
   Matricula,
@@ -310,4 +311,13 @@ export const api = {
   roiDashboard: () => req<RoiDashboard>("/roi/dashboard"),
   roiNorthStar: () =>
     req<{ medico_id: string | null; metricas: NorthStarMetric[] }>("/roi/north-star"),
+  // ── Automação da jornada (S.17) ──
+  automacaoRegras: () => req<Regra[]>("/automacoes/regras"),
+  automacaoToggle: (codigo: string, habilitado: boolean) =>
+    req<{ codigo: string; habilitado: boolean }>(`/automacoes/regras/${codigo}`, {
+      method: "PUT",
+      body: JSON.stringify({ habilitado }),
+    }),
+  automacaoTick: () => req<{ disparos: Record<string, number> }>("/automacoes/tick", { method: "POST" }),
+  automacaoCobertura: (dias = 30) => req<Cobertura>(`/automacoes/cobertura?dias=${dias}`),
 };

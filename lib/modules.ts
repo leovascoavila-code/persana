@@ -635,12 +635,22 @@ export const MODULES: PersanaModule[] = [
   {
     slug: "automacoes",
     nome: "Automações da jornada",
-    grupo: "Planejados (spec v3)",
+    grupo: "Jornada clínica",
+    backend: "modules/automacao.py · platform/automacao.py · migration 035",
     resumo: "S.17: 9 automações auditáveis da jornada do paciente (meta N5 ≥ 80%).",
-    status: "planejado",
-    entregue: [],
-    faltas: ["Todo o módulo (depende de biblioteca de protocolos viva)"],
-    frontPersana: "nenhum",
+    status: "live",
+    entregue: [
+      "Motor sobre a infra existente (cadence_touchpoints 031 / work_items 026 / consents 030) — não duplica dispatch; endpoint-triggered, nunca worker autônomo",
+      "Migration 035: automation_rules (override por tenant) + automation_runs (log, RLS FORCE, outcome CHECK, dedup por dia)",
+      "avaliar(): habilitado→consentimento→auto OU fallback humano (begin_nested por item); sem consentimento vira tarefa, nada enviado",
+      "tick() varre 3 gatilhos wired (protocolo a 30d do fim, marco de adesão vencido, risco de churn); N5 do ROI agora lê automation_runs (real)",
+      "Tela Tinta /automacoes: catálogo com toggle + rodar avaliação + cobertura N5",
+    ],
+    faltas: [
+      "6 dos 9 gatilhos ainda não-wired (event-driven, disparam dos próprios módulos)",
+      "Dispatch WhatsApp real do touchpoint = adapter per-tenant (gated, fatia própria)",
+    ],
+    frontPersana: "pronto",
   },
   {
     slug: "whatsapp-clinica",
