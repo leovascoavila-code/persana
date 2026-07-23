@@ -667,7 +667,25 @@ export const MODULES: PersanaModule[] = [
     ],
     faltas: [
       "PDF apresentável (hoje entrega estruturado + narrativa)",
-      "Metas por clínica + alertas de desvio (S.19 acompanhamento) — fatia própria",
+    ],
+    frontPersana: "pronto",
+  },
+  {
+    slug: "metas-clinica",
+    nome: "Metas + alertas de desvio",
+    grupo: "Jornada clínica",
+    backend: "modules/metas.py · platform/metas.py · migration 040",
+    resumo:
+      "S.19 acompanhamento: a clínica define alvos (consultas, protocolos, faturamento, adesão, no-show, automação, churn) e o sistema alerta desvios.",
+    status: "live",
+    entregue: [
+      "Migration 040: clinic_goals (alvo por métrica/tenant, RLS FORCE, metrica+sentido CHECK, UNIQUE)",
+      "avaliar() compara real (reusa relatorio.agregar, já verificado E2E) × meta respeitando sentido (piso/teto)",
+      "Desvio vira work_item 'desvio_meta' (domain='financeiro', reusa a fila 026; ON CONFLICT não duplica)",
+      "Métrica sem dado no mês é pulada (≠ contar 0). Tela Tinta /metas: definir alvos + real×meta on/off-track",
+    ],
+    faltas: [
+      "Metas por médico (hoje só clínica) + histórico de tendência da meta",
     ],
     frontPersana: "pronto",
   },

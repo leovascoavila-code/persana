@@ -16,6 +16,7 @@ const TABS = [
   { key: "automacoes", label: "Automações", href: "/automacoes" },
   { key: "dashboard", label: "ROI", href: "/dashboard" },
   { key: "relatorios", label: "Relatórios", href: "/relatorios" },
+  { key: "metas", label: "Metas", href: "/metas" },
   { key: "agenda", label: "Agenda", href: "/agenda" },
   { key: "briefing", label: "Briefing", href: "/briefing" },
   { key: "instrumento", label: "Instrumental", href: "/instrumento" },

@@ -23,6 +23,7 @@ import type { RoiDashboard, NorthStarMetric } from "@/lib/roi";
 import type { Regra, Cobertura } from "@/lib/automacao";
 import type { ExameDetalhe } from "@/lib/exames";
 import type { Relatorio, RelatorioItem } from "@/lib/relatorio";
+import type { MetaCatalogo, DesviosResult } from "@/lib/metas";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 import type {
   Matricula,
@@ -336,4 +337,15 @@ export const api = {
     req<Relatorio>("/relatorios/gerar", { method: "POST", body: JSON.stringify({ competencia }) }),
   relatorioAprovar: (id: string) =>
     req<{ id: string; status: string }>(`/relatorios/${id}/aprovar`, { method: "POST" }),
+  // ── Metas + alertas de desvio (S.19) ──
+  metas: () => req<MetaCatalogo[]>("/metas"),
+  metaDefinir: (metrica: string, alvo: number, sentido?: string) =>
+    req<{ metrica: string; alvo: number; sentido: string }>(`/metas/${metrica}`, {
+      method: "PUT",
+      body: JSON.stringify({ alvo, sentido: sentido ?? null }),
+    }),
+  metasDesvios: (competencia: string) =>
+    req<DesviosResult>(`/metas/desvios?competencia=${competencia}`),
+  metasAvaliar: (competencia: string) =>
+    req<DesviosResult>("/metas/avaliar", { method: "POST", body: JSON.stringify({ competencia }) }),
 };
