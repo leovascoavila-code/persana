@@ -22,6 +22,7 @@ import type { FichaPaciente } from "@/lib/ficha";
 import type { RoiDashboard, NorthStarMetric } from "@/lib/roi";
 import type { Regra, Cobertura } from "@/lib/automacao";
 import type { ExameDetalhe } from "@/lib/exames";
+import type { Relatorio, RelatorioItem } from "@/lib/relatorio";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 import type {
   Matricula,
@@ -327,4 +328,12 @@ export const api = {
       `/exames/paciente/${pid}`
     ),
   exameDetalhe: (id: string) => req<ExameDetalhe>(`/exames/${id}`),
+  // ── Relatório mensal da clínica (S.19) ──
+  relatorios: (competencia?: string) =>
+    req<RelatorioItem[]>(competencia ? `/relatorios?competencia=${competencia}` : "/relatorios"),
+  relatorioDetalhe: (id: string) => req<Relatorio>(`/relatorios/${id}`),
+  relatorioGerar: (competencia: string) =>
+    req<Relatorio>("/relatorios/gerar", { method: "POST", body: JSON.stringify({ competencia }) }),
+  relatorioAprovar: (id: string) =>
+    req<{ id: string; status: string }>(`/relatorios/${id}/aprovar`, { method: "POST" }),
 };

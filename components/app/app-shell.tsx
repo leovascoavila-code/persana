@@ -15,6 +15,7 @@ const TABS = [
   { key: "consulta", label: "Consulta", href: "/consulta" },
   { key: "automacoes", label: "Automações", href: "/automacoes" },
   { key: "dashboard", label: "ROI", href: "/dashboard" },
+  { key: "relatorios", label: "Relatórios", href: "/relatorios" },
   { key: "agenda", label: "Agenda", href: "/agenda" },
   { key: "briefing", label: "Briefing", href: "/briefing" },
   { key: "instrumento", label: "Instrumental", href: "/instrumento" },

@@ -652,6 +652,26 @@ export const MODULES: PersanaModule[] = [
     frontPersana: "pronto",
   },
   {
+    slug: "relatorio-mensal",
+    nome: "Relatório mensal da clínica",
+    grupo: "Jornada clínica",
+    backend: "modules/relatorio.py · platform/relatorio.py · agents/relatorio.py · migration 039",
+    resumo:
+      "S.19 Camada Agência: diagnóstico executivo mensal (agregações + narrativa por IA com revisão humana).",
+    status: "live",
+    entregue: [
+      "Migration 039: clinic_reports (RLS FORCE, status CHECK rascunho|aprovado, UNIQUE NULLS NOT DISTINCT)",
+      "Agrega consultas, funil→protocolo, adesão, honorários (serviço próprio, S.16.3), no-show, cobertura de automação, churn — reusa as fontes já verificadas E2E",
+      "Narrativa executiva + 3–5 recomendações por Claude sobre AGREGADOS (D-2 ok, sem PHI; fallback determinístico sem key)",
+      "Invariante: IA gera rascunho → admin aprova; re-gerar não sobrescreve aprovado. Tela Tinta /relatorios",
+    ],
+    faltas: [
+      "PDF apresentável (hoje entrega estruturado + narrativa)",
+      "Metas por clínica + alertas de desvio (S.19 acompanhamento) — fatia própria",
+    ],
+    frontPersana: "pronto",
+  },
+  {
     slug: "whatsapp-clinica",
     nome: "WhatsApp da clínica",
     grupo: "Planejados (spec v3)",
