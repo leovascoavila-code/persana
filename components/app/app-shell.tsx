@@ -1,29 +1,9 @@
 import Link from "next/link";
 import { Logo } from "@/components/marketing/logo";
 import { SessionChip } from "@/components/app/auth";
+import { AppNav, type AppTab } from "@/components/app/app-nav";
 
-const TABS = [
-  { key: "hoje", label: "Hoje", href: "/hoje" },
-  { key: "pacientes", label: "Pacientes", href: "/pacientes" },
-  { key: "exames", label: "Exames", href: "/exames" },
-  { key: "biblioteca", label: "Biblioteca", href: "/biblioteca" },
-  { key: "planos", label: "Planos", href: "/planos" },
-  { key: "cobranca", label: "Cobrança", href: "/cobranca" },
-  { key: "crm", label: "CRM", href: "/crm" },
-  { key: "cadencias", label: "Cadências", href: "/cadencias" },
-  { key: "proms", label: "PROMs", href: "/proms" },
-  { key: "consulta", label: "Consulta", href: "/consulta" },
-  { key: "automacoes", label: "Automações", href: "/automacoes" },
-  { key: "dashboard", label: "ROI", href: "/dashboard" },
-  { key: "relatorios", label: "Relatórios", href: "/relatorios" },
-  { key: "metas", label: "Metas", href: "/metas" },
-  { key: "agenda", label: "Agenda", href: "/agenda" },
-  { key: "briefing", label: "Briefing", href: "/briefing" },
-  { key: "instrumento", label: "Instrumental", href: "/instrumento" },
-  { key: "modulos", label: "Módulos", href: "/modulos" },
-] as const;
-
-export type AppTab = (typeof TABS)[number]["key"];
+export type { AppTab };
 
 /** Casca do app (mundo Tinta): topbar + área de conteúdo. */
 export function AppShell({
@@ -40,22 +20,7 @@ export function AppShell({
           <Link href="/" aria-label="Início">
             <Logo className="text-base" />
           </Link>
-          <nav className="ml-3.5 flex gap-1">
-            {TABS.map((t) => (
-              <Link
-                key={t.key}
-                href={t.href}
-                aria-current={t.key === active ? "page" : undefined}
-                className={
-                  t.key === active
-                    ? "rounded-sm bg-bg-2 px-[11px] py-[5px] text-[12.5px] text-text-1"
-                    : "rounded-sm px-[11px] py-[5px] text-[12.5px] text-text-3 transition-colors hover:text-text-1"
-                }
-              >
-                {t.label}
-              </Link>
-            ))}
-          </nav>
+          <AppNav active={active} />
           <div className="ml-auto flex items-center gap-3">
             <SessionChip />
             <span className="hidden text-[13px] text-text-3 sm:inline">
