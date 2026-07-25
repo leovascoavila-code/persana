@@ -664,9 +664,10 @@ export const MODULES: PersanaModule[] = [
       "Agrega consultas, funil→protocolo, adesão, honorários (serviço próprio, S.16.3), no-show, cobertura de automação, churn — reusa as fontes já verificadas E2E",
       "Narrativa executiva + 3–5 recomendações por Claude sobre AGREGADOS (D-2 ok, sem PHI; fallback determinístico sem key)",
       "Invariante: IA gera rascunho → admin aprova; re-gerar não sobrescreve aprovado. Tela Tinta /relatorios",
+      "PDF apresentável branded (reportlab, on-demand) — GET /relatorios/{id}/pdf + botão Baixar PDF",
     ],
     faltas: [
-      "PDF apresentável (hoje entrega estruturado + narrativa)",
+      "Logo no PDF (branding traz logo_url; hoje só nome+cores)",
     ],
     frontPersana: "pronto",
   },

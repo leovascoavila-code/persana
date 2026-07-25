@@ -86,6 +86,18 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+/** Fetch binário (PDF etc.) com o mesmo header de auth — retorna Blob. */
+async function reqBlob(path: string): Promise<Blob> {
+  const res = await fetch(`${BASE}${path}`, {
+    headers: { ...(_token ? { Authorization: `Bearer ${_token}` } : {}) },
+  });
+  if (!res.ok) {
+    if (res.status === 401) _token = null;
+    throw new ApiError(res.status, `HTTP ${res.status}`);
+  }
+  return res.blob();
+}
+
 export interface LoginIn {
   tenant_slug: string;
   email: string;
@@ -337,6 +349,7 @@ export const api = {
     req<Relatorio>("/relatorios/gerar", { method: "POST", body: JSON.stringify({ competencia }) }),
   relatorioAprovar: (id: string) =>
     req<{ id: string; status: string }>(`/relatorios/${id}/aprovar`, { method: "POST" }),
+  relatorioPdf: (id: string) => reqBlob(`/relatorios/${id}/pdf`),
   // ── Metas + alertas de desvio (S.19) ──
   metas: () => req<MetaCatalogo[]>("/metas"),
   metaDefinir: (metrica: string, alvo: number, sentido?: string) =>

@@ -56,6 +56,18 @@ export function RelatorioView() {
     }
   }
 
+  async function baixarPdf() {
+    if (mock) return;
+    try {
+      const blob = await api.relatorioPdf(rel.id);
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 15000);
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "falha ao baixar PDF");
+    }
+  }
+
   async function aprovar() {
     if (mock) return;
     try {
@@ -94,6 +106,14 @@ export function RelatorioView() {
           />
           <button className={btn} onClick={gerar} disabled={busy || !authed}>
             {busy ? "Gerando…" : "Gerar"}
+          </button>
+          <button
+            className="rounded-sm border border-border px-3 py-1.5 text-[13px] text-text-2 transition-colors hover:text-text-1 disabled:opacity-40"
+            onClick={baixarPdf}
+            disabled={mock}
+            title="Abre o PDF apresentável em nova aba"
+          >
+            Baixar PDF
           </button>
         </div>
       </div>
