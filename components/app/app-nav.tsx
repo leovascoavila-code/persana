@@ -16,6 +16,7 @@ const TELAS = {
   consulta: { label: "Consulta", href: "/consulta" },
   exames: { label: "Exames", href: "/exames" },
   proms: { label: "PROMs", href: "/proms" },
+  material: { label: "Material", href: "/material" },
   briefing: { label: "Briefing", href: "/briefing" },
   instrumento: { label: "Instrumental", href: "/instrumento" },
   biblioteca: { label: "Biblioteca", href: "/biblioteca" },
@@ -39,7 +40,7 @@ const DIRETO_INICIO = it("hoje");
 const DIRETO_FIM = it("modulos");
 
 const GRUPOS: { label: string; itens: Item[] }[] = [
-  { label: "Clínica", itens: (["pacientes", "agenda", "consulta", "exames", "proms", "briefing", "instrumento", "biblioteca"] as AppTab[]).map(it) },
+  { label: "Clínica", itens: (["pacientes", "agenda", "consulta", "exames", "proms", "material", "briefing", "instrumento", "biblioteca"] as AppTab[]).map(it) },
   { label: "Comercial", itens: (["planos", "cobranca"] as AppTab[]).map(it) },
   { label: "Jornada", itens: (["crm", "cadencias", "automacoes"] as AppTab[]).map(it) },
   { label: "Gestão", itens: (["dashboard", "relatorios", "metas"] as AppTab[]).map(it) },

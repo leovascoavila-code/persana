@@ -24,6 +24,7 @@ import type { Regra, Cobertura } from "@/lib/automacao";
 import type { ExameDetalhe } from "@/lib/exames";
 import type { Relatorio, RelatorioItem } from "@/lib/relatorio";
 import type { MetaCatalogo, DesviosResult } from "@/lib/metas";
+import type { MaterialItem, MaterialRendered } from "@/lib/material";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 import type {
   Matricula,
@@ -361,4 +362,13 @@ export const api = {
     req<DesviosResult>(`/metas/desvios?competencia=${competencia}`),
   metasAvaliar: (competencia: string) =>
     req<DesviosResult>("/metas/avaliar", { method: "POST", body: JSON.stringify({ competencia }) }),
+  // ── Material do paciente (S.16.2) ──
+  materiaisPaciente: (pid: string) => req<MaterialItem[]>(`/pacientes/${pid}/materiais`),
+  material: (mid: string) => req<MaterialRendered>(`/materiais/${mid}`),
+  materialAprovar: (mid: string) =>
+    req<{ id: string; status: string }>(`/materiais/${mid}/aprovar`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    }),
+  materialPdf: (mid: string) => reqBlob(`/materiais/${mid}/pdf`),
 };
