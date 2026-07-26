@@ -24,7 +24,7 @@ import type { Regra, Cobertura } from "@/lib/automacao";
 import type { ExameDetalhe } from "@/lib/exames";
 import type { Relatorio, RelatorioItem } from "@/lib/relatorio";
 import type { MetaCatalogo, DesviosResult } from "@/lib/metas";
-import type { MaterialItem, MaterialRendered } from "@/lib/material";
+import type { MaterialItem, MaterialRendered, ProtocoloPaciente } from "@/lib/material";
 import type { FilaCluster, PropostaDetalhe } from "@/lib/biblioteca";
 import type {
   Matricula,
@@ -371,4 +371,10 @@ export const api = {
       body: JSON.stringify({}),
     }),
   materialPdf: (mid: string) => reqBlob(`/materiais/${mid}/pdf`),
+  protocolosPaciente: (pid: string) => req<ProtocoloPaciente[]>(`/pacientes/${pid}/protocolos`),
+  materialGerar: (ppid: string) =>
+    req<{ id: string; status: string; titulo: string; alertas_compliance: string[] }>(
+      `/protocolos-paciente/${ppid}/material/gerar`,
+      { method: "POST" }
+    ),
 };

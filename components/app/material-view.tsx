@@ -16,6 +16,7 @@ import {
   STATUS_BADGE,
   type MaterialItem,
   type MaterialRendered,
+  type ProtocoloPaciente,
 } from "@/lib/material";
 
 const inputCls =
@@ -32,6 +33,10 @@ export function MaterialView() {
   const [lista, setLista] = React.useState<MaterialItem[]>(MOCK_LISTA);
   const [mat, setMat] = React.useState<MaterialRendered>(MOCK_MATERIAL);
   const [matId, setMatId] = React.useState<string | null>(null);
+  const [pidAtual, setPidAtual] = React.useState<string | null>(null);
+  const [protocolos, setProtocolos] = React.useState<ProtocoloPaciente[]>([]);
+  const [protoSel, setProtoSel] = React.useState("");
+  const [gerando, setGerando] = React.useState(false);
   const [mock, setMock] = React.useState(true);
   const [erro, setErro] = React.useState<string | null>(null);
 
@@ -53,12 +58,34 @@ export function MaterialView() {
   }
 
   async function abrirPaciente(pid: string) {
+    setPidAtual(pid);
     try {
-      setLista(await api.materiaisPaciente(pid));
+      const [mats, protos] = await Promise.all([
+        api.materiaisPaciente(pid),
+        api.protocolosPaciente(pid).catch(() => []),
+      ]);
+      setLista(mats);
+      setProtocolos(protos);
+      setProtoSel("");
       setMock(false);
       setErro(null);
     } catch (e) {
       setErro(e instanceof Error ? e.message : "falha ao listar materiais");
+    }
+  }
+
+  async function gerar() {
+    if (mock || !protoSel || !pidAtual) return;
+    setGerando(true);
+    try {
+      const novo = await api.materialGerar(protoSel);
+      setLista(await api.materiaisPaciente(pidAtual));
+      await abrirMaterial(novo.id);
+      setErro(null);
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "falha ao gerar material");
+    } finally {
+      setGerando(false);
     }
   }
 
@@ -132,6 +159,25 @@ export function MaterialView() {
                 <option key={p.id} value={p.id}>{p.nome}</option>
               ))}
             </select>
+          )}
+          {protocolos.length > 0 && (
+            <>
+              <select
+                className={inputCls + " max-w-xs"}
+                value={protoSel}
+                onChange={(e) => setProtoSel(e.target.value)}
+              >
+                <option value="">gerar de um protocolo…</option>
+                {protocolos.map((pp) => (
+                  <option key={pp.id} value={pp.id}>
+                    {pp.nome} ({pp.status})
+                  </option>
+                ))}
+              </select>
+              <button className={btn} onClick={gerar} disabled={!protoSel || gerando}>
+                {gerando ? "Gerando…" : "Gerar material"}
+              </button>
+            </>
           )}
         </div>
       )}

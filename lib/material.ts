@@ -10,6 +10,15 @@ export type MaterialItem = {
   criado_em: string;
 };
 
+export type ProtocoloPaciente = {
+  id: string; // = patient_protocol_id (ppid)
+  status: string;
+  protocolo: string; // slug
+  nome: string;
+  fase_atual: number;
+  total_fases: number | null;
+};
+
 export type MaterialRendered = {
   titulo: string;
   branding: {
