@@ -44,10 +44,13 @@ export function BillingView() {
   const [copiado, setCopiado] = React.useState(false);
 
   const [cfg, setCfg] = React.useState({
+    kind: "pix" as "pix" | "card",
     provider: "sicoob", display_nome: "", client_id: "", chave_pix: "",
-    cert_ref: "", cert_senha: "", sandbox: true, is_default: true,
+    cert_ref: "", cert_senha: "", access_token: "", sandbox: true, is_default: true,
   });
-  const [fat, setFat] = React.useState({ valor: "", enrollment_id: "", cpf: "", descricao: "" });
+  const [fat, setFat] = React.useState({
+    valor: "", enrollment_id: "", cpf: "", descricao: "", metodo: "pix" as "pix" | "card",
+  });
 
   const carregar = React.useCallback(() => {
     if (!authed) return;
@@ -86,19 +89,22 @@ export function BillingView() {
     if (!authed) return;
     setMsg(null);
     setErro(null);
+    const card = cfg.kind === "card";
     api
       .criarProviderConfig({
-        kind: "pix",
-        provider: cfg.provider,
+        kind: cfg.kind,
+        provider: card ? "mercadopago" : cfg.provider,
         display_nome: cfg.display_nome || null,
-        credenciais: { client_id: cfg.client_id, chave_pix: cfg.chave_pix, cert_senha: cfg.cert_senha },
-        cert_ref: cfg.cert_ref || null,
+        credenciais: card
+          ? { access_token: cfg.access_token }
+          : { client_id: cfg.client_id, chave_pix: cfg.chave_pix, cert_senha: cfg.cert_senha },
+        cert_ref: card ? null : cfg.cert_ref || null,
         is_default: cfg.is_default,
         sandbox: cfg.sandbox,
       })
       .then(() => {
         setMsg("Provedor configurado.");
-        setCfg({ ...cfg, client_id: "", chave_pix: "", cert_senha: "" });
+        setCfg({ ...cfg, client_id: "", chave_pix: "", cert_senha: "", access_token: "" });
         carregar();
       })
       .catch((e) => setErro(String(e.message ?? e)));
@@ -111,12 +117,13 @@ export function BillingView() {
     api
       .criarInvoice({
         valor_centavos: reaisParaCentavos(fat.valor),
+        metodo: fat.metodo,
         enrollment_id: fat.enrollment_id || null,
         cpf_cnpj: fat.cpf || null,
         descricao: fat.descricao || null,
       })
       .then((r) => {
-        setMsg("Cobrança Pix gerada.");
+        setMsg(fat.metodo === "card" ? "Checkout de cartão gerado." : "Cobrança Pix gerada.");
         setSelInv(r.id);
         carregar();
       })
@@ -140,7 +147,7 @@ export function BillingView() {
             Cobrança
           </h1>
           <p className="mt-1 text-sm text-text-3">
-            Pix por clínica (recebedor próprio) · fatura + QR · cartão em breve
+            Pix + cartão por clínica (recebedor próprio) · fatura + QR/checkout
           </p>
         </div>
         {!authed && <Badge variant="warn">entrar para dados reais</Badge>}
@@ -168,7 +175,7 @@ export function BillingView() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Provedor de pagamento (Pix)</CardTitle>
+              <CardTitle>Provedor de pagamento</CardTitle>
               <p className="mt-1 text-[12px] text-text-3">
                 Recebedor da clínica. Credenciais cifradas no servidor; o certificado
                 vive por referência. Só perfil financeiro configura.
@@ -176,18 +183,38 @@ export function BillingView() {
             </CardHeader>
             <CardBody>
               <div className="space-y-2">
+                <div className="flex gap-1">
+                  {(["pix", "card"] as const).map((k) => (
+                    <button
+                      key={k}
+                      onClick={() => setCfg({ ...cfg, kind: k })}
+                      className={
+                        "rounded-sm px-3 py-1 text-[12.5px] transition-colors " +
+                        (cfg.kind === k ? "bg-brand-500 text-white" : "border border-border text-text-3 hover:text-text-1")
+                      }
+                    >
+                      {k === "pix" ? "Pix" : "Cartão"}
+                    </button>
+                  ))}
+                </div>
                 <div className="flex gap-2">
-                  <select
-                    className="rounded-md border border-border bg-bg-1 px-2 py-1.5 text-sm text-text-1"
-                    value={cfg.provider}
-                    onChange={(e) => setCfg({ ...cfg, provider: e.target.value })}
-                    disabled={!authed}
-                  >
-                    <option value="sicoob">Sicoob</option>
-                    <option value="bb">Banco do Brasil</option>
-                    <option value="itau">Itaú</option>
-                    <option value="inter">Inter</option>
-                  </select>
+                  {cfg.kind === "pix" ? (
+                    <select
+                      className="rounded-md border border-border bg-bg-1 px-2 py-1.5 text-sm text-text-1"
+                      value={cfg.provider}
+                      onChange={(e) => setCfg({ ...cfg, provider: e.target.value })}
+                      disabled={!authed}
+                    >
+                      <option value="sicoob">Sicoob</option>
+                      <option value="bb">Banco do Brasil</option>
+                      <option value="itau">Itaú</option>
+                      <option value="inter">Inter</option>
+                    </select>
+                  ) : (
+                    <span className="grid place-items-center rounded-md border border-border bg-bg-1 px-3 text-sm text-text-2">
+                      Mercado Pago
+                    </span>
+                  )}
                   <input
                     className={inputCls}
                     placeholder="Nome de exibição"
@@ -196,35 +223,48 @@ export function BillingView() {
                     disabled={!authed}
                   />
                 </div>
-                <input
-                  className={inputCls}
-                  placeholder="Client ID"
-                  value={cfg.client_id}
-                  onChange={(e) => setCfg({ ...cfg, client_id: e.target.value })}
-                  disabled={!authed}
-                />
-                <input
-                  className={inputCls}
-                  placeholder="Chave Pix"
-                  value={cfg.chave_pix}
-                  onChange={(e) => setCfg({ ...cfg, chave_pix: e.target.value })}
-                  disabled={!authed}
-                />
-                <input
-                  className={inputCls}
-                  placeholder="Caminho do certificado (.pfx no servidor)"
-                  value={cfg.cert_ref}
-                  onChange={(e) => setCfg({ ...cfg, cert_ref: e.target.value })}
-                  disabled={!authed}
-                />
-                <input
-                  className={inputCls}
-                  type="password"
-                  placeholder="Senha do certificado"
-                  value={cfg.cert_senha}
-                  onChange={(e) => setCfg({ ...cfg, cert_senha: e.target.value })}
-                  disabled={!authed}
-                />
+                {cfg.kind === "pix" ? (
+                  <>
+                    <input
+                      className={inputCls}
+                      placeholder="Client ID"
+                      value={cfg.client_id}
+                      onChange={(e) => setCfg({ ...cfg, client_id: e.target.value })}
+                      disabled={!authed}
+                    />
+                    <input
+                      className={inputCls}
+                      placeholder="Chave Pix"
+                      value={cfg.chave_pix}
+                      onChange={(e) => setCfg({ ...cfg, chave_pix: e.target.value })}
+                      disabled={!authed}
+                    />
+                    <input
+                      className={inputCls}
+                      placeholder="Caminho do certificado (.pfx no servidor)"
+                      value={cfg.cert_ref}
+                      onChange={(e) => setCfg({ ...cfg, cert_ref: e.target.value })}
+                      disabled={!authed}
+                    />
+                    <input
+                      className={inputCls}
+                      type="password"
+                      placeholder="Senha do certificado"
+                      value={cfg.cert_senha}
+                      onChange={(e) => setCfg({ ...cfg, cert_senha: e.target.value })}
+                      disabled={!authed}
+                    />
+                  </>
+                ) : (
+                  <input
+                    className={inputCls}
+                    type="password"
+                    placeholder="Access token do Mercado Pago"
+                    value={cfg.access_token}
+                    onChange={(e) => setCfg({ ...cfg, access_token: e.target.value })}
+                    disabled={!authed}
+                  />
+                )}
                 <label className="flex items-center gap-2 text-[13px] text-text-2">
                   <input
                     type="checkbox"
@@ -277,10 +317,24 @@ export function BillingView() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Nova cobrança Pix</CardTitle>
+              <CardTitle>Nova cobrança</CardTitle>
             </CardHeader>
             <CardBody>
               <div className="space-y-2">
+                <div className="flex gap-1">
+                  {(["pix", "card"] as const).map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setFat({ ...fat, metodo: m })}
+                      className={
+                        "rounded-sm px-3 py-1 text-[12.5px] transition-colors " +
+                        (fat.metodo === m ? "bg-brand-500 text-white" : "border border-border text-text-3 hover:text-text-1")
+                      }
+                    >
+                      {m === "pix" ? "Pix" : "Cartão"}
+                    </button>
+                  ))}
+                </div>
                 <div className="flex gap-2">
                   <input
                     className={inputCls}
@@ -338,7 +392,16 @@ export function BillingView() {
                 </div>
               </CardHeader>
               <CardBody>
-                {det.pix_qr_b64 ? (
+                {det.checkout_url ? (
+                  <a
+                    href={det.checkout_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mb-3 inline-block rounded-sm bg-brand-500 px-3 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-brand-600"
+                  >
+                    Abrir checkout do cartão →
+                  </a>
+                ) : det.pix_qr_b64 ? (
                   <img
                     src={`data:image/png;base64,${det.pix_qr_b64}`}
                     alt="QR Pix"

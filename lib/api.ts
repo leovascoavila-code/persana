@@ -257,6 +257,7 @@ export const api = {
   invoices: () => req<Invoice[]>("/billing/invoices"),
   criarInvoice: (body: {
     valor_centavos: number;
+    metodo?: "pix" | "card";
     enrollment_id?: string | null;
     subscription_id?: string | null;
     offer_id?: string | null;
@@ -264,10 +265,15 @@ export const api = {
     cpf_cnpj?: string | null;
     nome?: string | null;
   }) =>
-    req<{ id: string; status: string; provider_ref: string; pix_copia_cola: string; pix_qr_b64: string | null }>(
-      "/billing/invoices",
-      { method: "POST", body: JSON.stringify(body) }
-    ),
+    req<{
+      id: string;
+      status: string;
+      metodo?: string;
+      provider_ref: string;
+      pix_copia_cola: string | null;
+      pix_qr_b64: string | null;
+      checkout_url?: string | null;
+    }>("/billing/invoices", { method: "POST", body: JSON.stringify(body) }),
   invoice: (iid: string) => req<InvoiceDetalhe>(`/billing/invoices/${iid}`),
   // ── CRM (Onda 4: /crm) ──
   crmPipeline: () => req<Pipeline>("/crm/pipeline"),

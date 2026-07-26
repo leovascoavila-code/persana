@@ -39,6 +39,7 @@ export interface Invoice {
 export interface InvoiceDetalhe extends Invoice {
   pix_copia_cola: string | null;
   pix_qr_b64: string | null;
+  checkout_url?: string | null; // cartão (Slice 2b): link hosted do paciente
 }
 
 export const INVOICE_STATUS_LABEL: Record<InvoiceStatus, string> = {
